@@ -67,9 +67,9 @@ function loadEvidenceData() {
     })
     .then(function (data) {
       state.allEvidence = data;
-      console.log("[Demo 3] Evidence loaded:", state.allEvidence.length);
+      // console.log("[Demo 3] Evidence loaded:", state.allEvidence.length);
       applyStoredBookmarkFlags();
-      state.filteredEvidence = state.allEvidence;
+      state.filteredEvidence = state.allEvidence.slice(); // shallow copy [demo 2]
       finishEvidenceLoading();
       renderDashboard();
       populateAllDropdowns();

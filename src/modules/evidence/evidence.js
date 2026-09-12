@@ -79,7 +79,17 @@ function getFilteredEvidence() {
     if (matches) results.push(item);
   }
 
-  state.filteredEvidence = results;
+  console.log(
+    "[Demo 2] new result replaces sorted array:",
+    state.filteredEvidence !== results
+  );
+
+  console.log("[Demo 2] rebuilt order:",
+    results.slice(0, 5).map(function (ev) {
+      return ev.id;
+    })
+  );
+
   return results;
 }
 
@@ -88,7 +98,7 @@ export function renderEvidenceList() {
   if (!container) return;
 
   var loadingIndicator = document.getElementById("evidenceLoadingIndicator");
-  console.log("[Demo 3] renderEvidenceList, evidenceViewLoading:", evidenceViewLoading);
+  // console.log("[Demo 3] renderEvidenceList, evidenceViewLoading:", evidenceViewLoading);
   if (evidenceViewLoading) {
     if (loadingIndicator) loadingIndicator.classList.remove("hidden");
     container.innerHTML = "";
@@ -97,6 +107,8 @@ export function renderEvidenceList() {
   if (loadingIndicator) loadingIndicator.classList.add("hidden");
 
   var results = getFilteredEvidence();
+  results = sortEvidence(results);
+  state.filteredEvidence = results;
 
   var html = "";
   if (results.length === 0) {
@@ -109,6 +121,31 @@ export function renderEvidenceList() {
 
   // Event delegation for card clicks / bookmark button.
   container.addEventListener("click", handleEvidenceListClick);
+}
+
+function sortEvidence(items) {
+  var sortValue = document.getElementById("sortEvidence").value;
+  var sortedItems = items.slice();
+
+  if (sortValue === "title-asc") {
+    sortedItems.sort(function (a, b) {
+      return a.title.localeCompare(b.title);
+    });
+  } else if (sortValue === "title-desc") {
+    sortedItems.sort(function (a, b) {
+      return b.title.localeCompare(a.title);
+    });
+  } else if (sortValue === "date-asc") {
+    sortedItems.sort(function (a, b) {
+      return new Date(a.timestamp) - new Date(b.timestamp);
+    });
+  } else {
+    sortedItems.sort(function (a, b) {
+      return new Date(b.timestamp) - new Date(a.timestamp);
+    });
+  }
+
+  return sortedItems;
 }
 
 function renderEvidenceCardHTML(ev) {
@@ -172,26 +209,19 @@ export function applyStoredBookmarkFlags() {
 }
 
 export function handleSortChange() {
-  var sortValue = document.getElementById("sortEvidence").value;
-
-  if (sortValue === "title-asc") {
-    state.filteredEvidence.sort(function (a, b) {
-      return a.title.localeCompare(b.title);
-    });
-  } else if (sortValue === "title-desc") {
-    state.filteredEvidence.sort(function (a, b) {
-      return b.title.localeCompare(a.title);
-    });
-  } else if (sortValue === "date-asc") {
-    state.filteredEvidence.sort(function (a, b) {
-      return new Date(a.timestamp) - new Date(b.timestamp);
-    });
-  } else {
-    state.filteredEvidence.sort(function (a, b) {
-      return new Date(b.timestamp) - new Date(a.timestamp);
-    });
-  }
   renderEvidenceList();
+
+  console.log("[Demo 2] source order after fix:",
+    state.allEvidence.slice(0, 5).map(function (ev) {
+      return ev.id;
+    })
+  );
+
+  console.log("[Demo 2] rendered order after fix:",
+    state.filteredEvidence.slice(0, 5).map(function (ev) {
+      return ev.id;
+    })
+  );
 }
 
 export function clearFilters() {
