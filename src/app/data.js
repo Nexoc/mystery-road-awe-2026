@@ -61,7 +61,7 @@ function loadCorePeopleAndLocations() {
 }
 
 function loadEvidenceData() {
-  fetch("data/evidence.json")
+  return fetch("data/evidence.json")
     .then(function (res) {
       return res.json();
     })
@@ -103,8 +103,12 @@ function loadTimelineData() {
 export function loadAllData() {
   showLoadingOverlay("Loading case file…");
   loadingStepsRemaining = 2;
+
   return loadCorePeopleAndLocations().then(function () {
-    loadEvidenceData();
-    loadTimelineData();
+    // Wait for all feature data before the initial render.
+    return Promise.all([
+      loadEvidenceData(),
+      loadTimelineData()
+    ]);
   });
 }

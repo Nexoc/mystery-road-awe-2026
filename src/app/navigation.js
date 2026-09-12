@@ -1,9 +1,9 @@
-import { state } from "./state.js";
 import { renderDashboard } from "../modules/dashboard/dashboard.js";
 import { renderEvidenceList } from "../modules/evidence/evidence.js";
 import { renderLocations, renderPeople } from "../modules/people/people.js";
 import { renderTimeline } from "../modules/timeline/timeline.js";
 import { renderWorkspace } from "../modules/workspace/workspace.js";
+import { state } from "./state.js";
 
 export function navigateTo(viewName) {
   window.location.hash = viewName;
@@ -32,9 +32,9 @@ export function handleHashChange() {
     }
   }
 
-  if (hash === "dashboard" && !state.viewRendered.dashboard) {
+  if (hash === "dashboard") {
     renderDashboard();
-    state.viewRendered.dashboard = true;
+    // state.viewRendered.dashboard = true;
   } else if (hash === "evidence" && !state.viewRendered.evidence) {
     renderEvidenceList();
     state.viewRendered.evidence = true;

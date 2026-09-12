@@ -1,7 +1,7 @@
-import { state } from "../../app/state.js";
 import { navigateTo } from "../../app/navigation.js";
-import { openEvidenceDetail } from "../evidence/evidence.js";
+import { state } from "../../app/state.js";
 import { STORAGE_KEY_HYPOTHESIS } from "../../shared/storage.js";
+import { openEvidenceDetail } from "../evidence/evidence.js";
 
 export function renderWorkspace() {
   renderBookmarksList();
@@ -125,7 +125,15 @@ function loadHypothesisFromStorage() {
   var raw = localStorage.getItem(STORAGE_KEY_HYPOTHESIS);
   if (!raw) return;
 
-  var draft = JSON.parse(raw);
+  // var draft = JSON.parse(raw);
+  var draft;
+
+  try {
+    draft = JSON.parse(raw);
+  } catch (err) {
+    console.warn("Invalid hypothesis data was ignored.", err);
+    return;
+  }
 
   document.getElementById("hypSuspect").value = draft.suspectId || "";
   document.getElementById("hypNature").value = draft.nature || "";

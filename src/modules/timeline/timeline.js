@@ -1,11 +1,11 @@
-import { state } from "../../app/state.js";
 import { navigateTo } from "../../app/navigation.js";
-import { openEvidenceDetail } from "../evidence/evidence.js";
+import { state } from "../../app/state.js";
 import {
   findEvidenceById,
   findLocationById,
   formatDate
 } from "../../shared/utils.js";
+import { openEvidenceDetail } from "../evidence/evidence.js";
 
 var modalCloseListenerCount = 0;
 
@@ -69,7 +69,11 @@ export function renderTimeline() {
     var eventLocationNames = [];
     for (var el = 0; el < item.locationIds.length; el++) {
       var evtLoc = findLocationById(item.locationIds[el]);
-      eventLocationNames.push(evtLoc || item.locationIds[el]);
+      // eventLocationNames.push(evtLoc || item.locationIds[el]);
+      // Use the location name, not the object.
+      eventLocationNames.push(
+        evtLoc ? evtLoc.name : item.locationIds[el]
+      );
     }
     if (eventLocationNames.length > 0) {
       html += '<p class="evidence-meta">Location: ' + eventLocationNames.join(", ") + "</p>";
