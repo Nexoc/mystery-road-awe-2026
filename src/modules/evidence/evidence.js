@@ -1,5 +1,10 @@
 import { state } from "../../app/state.js";
 import {
+  loadNoteForEvidence,
+  saveBookmarksToStorage,
+  saveNoteForEvidence
+} from "../../shared/storage.js";
+import {
   evidenceMentionsPerson,
   findEvidenceById,
   findLocationById,
@@ -8,15 +13,14 @@ import {
   getRelevanceBadgeClass,
   getStatusBadgeClass
 } from "../../shared/utils.js";
-import {
-  loadNoteForEvidence,
-  saveBookmarksToStorage,
-  saveNoteForEvidence
-} from "../../shared/storage.js";
 
 var selectedEvidence = null;
 var evidenceViewLoading = true;
 var latestSearchRequestId = 0;
+
+export function finishEvidenceLoading() {
+  evidenceViewLoading = false;
+}
 
 export function populateEvidenceDropdowns() {
   var typeSelect = document.getElementById("filterType");
@@ -84,6 +88,7 @@ export function renderEvidenceList() {
   if (!container) return;
 
   var loadingIndicator = document.getElementById("evidenceLoadingIndicator");
+  console.log("[Demo 3] renderEvidenceList, evidenceViewLoading:", evidenceViewLoading);
   if (evidenceViewLoading) {
     if (loadingIndicator) loadingIndicator.classList.remove("hidden");
     container.innerHTML = "";

@@ -1,15 +1,17 @@
-import { state } from "./state.js";
 import { renderDashboard } from "../modules/dashboard/dashboard.js";
 import {
   applyStoredBookmarkFlags,
+  finishEvidenceLoading,
   populateEvidenceDropdowns,
-  renderEvidenceList
+  renderEvidenceList,
 } from "../modules/evidence/evidence.js";
 import {
   populateTimelineDropdowns,
   renderTimeline
 } from "../modules/timeline/timeline.js";
 import { populateHypothesisDropdowns } from "../modules/workspace/workspace.js";
+import { state } from "./state.js";
+
 
 var loadingStepsRemaining = 2;
 
@@ -65,8 +67,10 @@ function loadEvidenceData() {
     })
     .then(function (data) {
       state.allEvidence = data;
+      console.log("[Demo 3] Evidence loaded:", state.allEvidence.length);
       applyStoredBookmarkFlags();
       state.filteredEvidence = state.allEvidence;
+      finishEvidenceLoading();
       renderDashboard();
       populateAllDropdowns();
       if (state.currentPage === "evidence") renderEvidenceList();
