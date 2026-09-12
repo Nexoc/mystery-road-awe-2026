@@ -31,8 +31,14 @@ function setupEventListeners() {
 
   var navButtons = document.querySelectorAll(".nav-btn");
   for (var i = 0; i < navButtons.length; i++) {
-    navButtons[i].addEventListener("click", function () {
-      var targetView = navButtons[i].getAttribute("data-view");
+    navButtons[i].addEventListener("click", function (e) {
+
+      //console.log("[Demo 4] i:", i);
+      //console.log("[Demo 4] navButtons.length:", navButtons.length);
+      //console.log("[Demo 4] navButtons[i]:", navButtons[i]);
+
+      // var targetView = navButtons[i].getAttribute("data-view");
+      var targetView = e.currentTarget.getAttribute("data-view");
       console.log("nav clicked:", targetView);
     });
   }

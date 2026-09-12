@@ -79,16 +79,16 @@ function getFilteredEvidence() {
     if (matches) results.push(item);
   }
 
-  console.log(
-    "[Demo 2] new result replaces sorted array:",
-    state.filteredEvidence !== results
-  );
+  // console.log(
+  //   "[Demo 2] new result replaces sorted array:",
+  //   state.filteredEvidence !== results
+  // );
 
-  console.log("[Demo 2] rebuilt order:",
-    results.slice(0, 5).map(function (ev) {
-      return ev.id;
-    })
-  );
+  // console.log("[Demo 2] rebuilt order:",
+  //   results.slice(0, 5).map(function (ev) {
+  //     return ev.id;
+  //   })
+  // );
 
   return results;
 }
@@ -211,17 +211,17 @@ export function applyStoredBookmarkFlags() {
 export function handleSortChange() {
   renderEvidenceList();
 
-  console.log("[Demo 2] source order after fix:",
-    state.allEvidence.slice(0, 5).map(function (ev) {
-      return ev.id;
-    })
-  );
+  // console.log("[Demo 2] source order after fix:",
+  //   state.allEvidence.slice(0, 5).map(function (ev) {
+  //     return ev.id;
+  //   })
+  // );
 
-  console.log("[Demo 2] rendered order after fix:",
-    state.filteredEvidence.slice(0, 5).map(function (ev) {
-      return ev.id;
-    })
-  );
+  // console.log("[Demo 2] rendered order after fix:",
+  //   state.filteredEvidence.slice(0, 5).map(function (ev) {
+  //     return ev.id;
+  //   })
+  // );
 }
 
 export function clearFilters() {
