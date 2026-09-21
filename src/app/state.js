@@ -1,0 +1,1 @@
+// Holds shared application state.
