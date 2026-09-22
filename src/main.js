@@ -28,8 +28,8 @@ window.saveCurrentNote = saveCurrentNote;
 function setupEventListeners() {
   const navButtons = document.querySelectorAll(".nav-btn");
   for (let i = 0; i < navButtons.length; i++) {
-    navButtons[i].addEventListener("click", function (e) {
-      const targetView = e.currentTarget.getAttribute("data-view");
+    navButtons[i].addEventListener("click", function () {
+      const targetView = this.getAttribute("data-view");
       console.log("nav clicked:", targetView);
     });
   }
@@ -51,8 +51,8 @@ function setupEventListeners() {
   document.getElementById("timelineLocationFilter").addEventListener("change", renderTimeline);
   document.getElementById("timelineTypeFilter").addEventListener("change", renderTimeline);
 
-  document.getElementById("hypConfidence").addEventListener("input", function (e) {
-    document.getElementById("hypConfidenceValue").textContent = e.target.value;
+  document.getElementById("hypConfidence").addEventListener("input", (event) => {
+    document.getElementById("hypConfidenceValue").textContent = event.target.value;
   });
 }
 

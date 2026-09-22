@@ -1,11 +1,11 @@
 import { state } from "../app/state.js";
 
-function findById(items, id) {
+const findById = (items, id) => {
   for (let i = 0; i < items.length; i++) {
     if (items[i].id === id) return items[i];
   }
   return null;
-}
+};
 
 export function findEvidenceById(id) {
   return findById(state.allEvidence, id);

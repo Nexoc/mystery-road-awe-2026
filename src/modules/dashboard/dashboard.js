@@ -1,6 +1,9 @@
 import { state } from "../../app/state.js";
 import { formatDate, getStatusBadgeClass } from "../../shared/utils.js";
 
+const statCardHTML = (value, label) =>
+  '<div class="stat-card"><div class="stat-value">' + value + '</div><div class="stat-label">' + label + "</div></div>";
+
 export function renderDashboard() {
   const container = document.getElementById("dashboardContent");
   if (!container) return;
@@ -61,8 +64,4 @@ export function renderDashboard() {
   html += "</div>"; // dashboard-columns
 
   container.innerHTML = html;
-}
-
-function statCardHTML(value, label) {
-  return '<div class="stat-card"><div class="stat-value">' + value + '</div><div class="stat-label">' + label + "</div></div>";
 }
