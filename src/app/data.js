@@ -13,11 +13,11 @@ import { populateHypothesisDropdowns } from "../modules/workspace/workspace.js";
 import { state } from "./state.js";
 
 
-var loadingStepsRemaining = 2;
+let loadingStepsRemaining = 2;
 
 function showLoadingOverlay(msg) {
-  var overlay = document.getElementById("loadingOverlay");
-  var text = document.getElementById("loadingText");
+  const overlay = document.getElementById("loadingOverlay");
+  const text = document.getElementById("loadingText");
   if (text) text.textContent = msg;
   if (overlay) overlay.classList.remove("hidden");
 }
@@ -25,7 +25,7 @@ function showLoadingOverlay(msg) {
 function hideLoadingStep() {
   loadingStepsRemaining--;
   if (loadingStepsRemaining <= 0) {
-    var overlay = document.getElementById("loadingOverlay");
+    const overlay = document.getElementById("loadingOverlay");
     if (overlay) overlay.classList.add("hidden");
   }
 }
@@ -36,28 +36,22 @@ function populateAllDropdowns() {
   populateHypothesisDropdowns();
 }
 
-function loadCorePeopleAndLocations() {
-  return fetch("data/case.json").then(function (caseRes) {
-    return caseRes.json().then(function (caseJson) {
-      state.caseData = caseJson;
+async function loadCorePeopleAndLocations() {
+  const caseRes = await fetch("data/case.json");
+  const caseJson = await caseRes.json();
+  state.caseData = caseJson;
 
-      return fetch("data/people.json").then(function (peopleRes) {
-        return peopleRes.json().then(function (peopleJson) {
-          state.allPeople = peopleJson;
+  const peopleRes = await fetch("data/people.json");
+  const peopleJson = await peopleRes.json();
+  state.allPeople = peopleJson;
 
-          return fetch("data/locations.json").then(function (locationsRes) {
-            return locationsRes.json().then(function (locationsJson) {
-              state.allLocations = locationsJson;
+  const locationsRes = await fetch("data/locations.json");
+  const locationsJson = await locationsRes.json();
+  state.allLocations = locationsJson;
 
-              hideLoadingStep();
-              renderDashboard();
-              populateAllDropdowns();
-            });
-          });
-        });
-      });
-    });
-  });
+  hideLoadingStep();
+  renderDashboard();
+  populateAllDropdowns();
 }
 
 function loadEvidenceData() {
@@ -67,7 +61,6 @@ function loadEvidenceData() {
     })
     .then(function (data) {
       state.allEvidence = data;
-      // console.log("[Demo 3] Evidence loaded:", state.allEvidence.length);
       applyStoredBookmarkFlags();
       state.filteredEvidence = state.allEvidence.slice(); // shallow copy [demo 2]
       finishEvidenceLoading();
@@ -81,23 +74,19 @@ function loadEvidenceData() {
     });
 }
 
-function loadTimelineData() {
-  return fetch("data/timeline.json")
-    .then(function (res) {
-      return res.json();
-    })
-    .then(function (data) {
-      state.allTimeline = data;
-      renderDashboard();
-      if (state.currentPage === "timeline") renderTimeline();
-      populateAllDropdowns();
-    })
-    .catch(function (err) {
-      console.log("timeline load error", err);
-    })
-    .finally(function () {
-      hideLoadingStep();
-    });
+async function loadTimelineData() {
+  try {
+    const res = await fetch("data/timeline.json");
+    const data = await res.json();
+    state.allTimeline = data;
+    renderDashboard();
+    if (state.currentPage === "timeline") renderTimeline();
+    populateAllDropdowns();
+  } catch (err) {
+    console.log("timeline load error", err);
+  } finally {
+    hideLoadingStep();
+  }
 }
 
 export function loadAllData() {

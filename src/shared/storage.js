@@ -1,8 +1,8 @@
 import { state } from "../app/state.js";
 
-var STORAGE_KEY_BOOKMARKS = "remotion_bookmarks";
-var STORAGE_KEY_NOTES = "remotion_notes";
-export var STORAGE_KEY_HYPOTHESIS = "remotion_hypothesis";
+const STORAGE_KEY_BOOKMARKS = "remotion_bookmarks";
+const STORAGE_KEY_NOTES = "remotion_notes";
+export const STORAGE_KEY_HYPOTHESIS = "remotion_hypothesis";
 
 export function saveBookmarksToStorage() {
   localStorage.setItem(STORAGE_KEY_BOOKMARKS, JSON.stringify(state.bookmarks));
@@ -10,8 +10,8 @@ export function saveBookmarksToStorage() {
 
 export function loadBookmarksFromStorage() {
   try {
-    var raw = localStorage.getItem(STORAGE_KEY_BOOKMARKS);
-    var parsed = raw ? JSON.parse(raw) : [];
+    const raw = localStorage.getItem(STORAGE_KEY_BOOKMARKS);
+    const parsed = raw ? JSON.parse(raw) : [];
     state.bookmarks = Array.isArray(parsed) ? parsed : [];
   } catch (err) {
     console.warn("Could not read stored bookmarks, starting empty", err);
@@ -29,7 +29,7 @@ export function loadNoteForEvidence(evidenceId) {
 }
 
 export function loadNotesFromStorage() {
-  var raw = localStorage.getItem(STORAGE_KEY_NOTES);
+  const raw = localStorage.getItem(STORAGE_KEY_NOTES);
   if (!raw) {
     state.notesStore = {};
     return;

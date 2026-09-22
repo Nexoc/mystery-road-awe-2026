@@ -24,21 +24,12 @@ window.switchPeopleTab = switchPeopleTab;
 window.saveHypothesis = saveHypothesis;
 window.closeEvidenceDetail = closeEvidenceDetail;
 window.saveCurrentNote = saveCurrentNote;
-window.renderEvidenceList = renderEvidenceList;
 
 function setupEventListeners() {
-  window.addEventListener("hashchange", handleHashChange);
-
-  var navButtons = document.querySelectorAll(".nav-btn");
-  for (var i = 0; i < navButtons.length; i++) {
+  const navButtons = document.querySelectorAll(".nav-btn");
+  for (let i = 0; i < navButtons.length; i++) {
     navButtons[i].addEventListener("click", function (e) {
-
-      //console.log("[Demo 4] i:", i);
-      //console.log("[Demo 4] navButtons.length:", navButtons.length);
-      //console.log("[Demo 4] navButtons[i]:", navButtons[i]);
-
-      // var targetView = navButtons[i].getAttribute("data-view");
-      var targetView = e.currentTarget.getAttribute("data-view");
+      const targetView = e.currentTarget.getAttribute("data-view");
       console.log("nav clicked:", targetView);
     });
   }
@@ -50,7 +41,6 @@ function setupEventListeners() {
   document.getElementById("filterLocation").addEventListener("change", renderEvidenceList);
 
   document.getElementById("filterStatus").addEventListener("change", renderEvidenceList);
-  document.getElementById("filterStatus").setAttribute("onchange", "renderEvidenceList()");
 
   document.getElementById("filterRelevance").addEventListener("change", renderEvidenceList);
 
@@ -73,7 +63,7 @@ function initApp() {
 
   loadAllData().then(function () {
     handleHashChange();
-    var firstNote = loadNoteAsync("E01");
+    const firstNote = loadNoteAsync("E01");
     console.log("First note preview:", firstNote);
   });
 }
