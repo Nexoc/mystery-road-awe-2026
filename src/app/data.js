@@ -7,11 +7,10 @@ import {
 } from "../modules/evidence/evidence.js";
 import {
   populateTimelineDropdowns,
-  renderTimeline
+  renderTimeline,
 } from "../modules/timeline/timeline.js";
 import { populateHypothesisDropdowns } from "../modules/workspace/workspace.js";
 import { state } from "./state.js";
-
 
 let loadingStepsRemaining = 2;
 
@@ -95,9 +94,6 @@ export function loadAllData() {
 
   return loadCorePeopleAndLocations().then(function () {
     // Wait for all feature data before the initial render.
-    return Promise.all([
-      loadEvidenceData(),
-      loadTimelineData()
-    ]);
+    return Promise.all([loadEvidenceData(), loadTimelineData()]);
   });
 }
