@@ -7,7 +7,7 @@ Die Datenmodelle aus den JSON-Dateien beschreiben und den zentralen State genaue
 ## Ausgangssituation
 
 `Evidence`, `Person` und `Location` existierten bereits. Für Falldaten und Timeline fehlten noch
-eigene Typen. Der Loader `data.js` war weiterhin JavaScript.
+eigene Typen.
 
 ## Umsetzung
 
@@ -29,16 +29,7 @@ caseData: {} as CaseData
 
 Damit kennt der Compiler die Form dieser Werte im gesamten Projekt.
 
-### Schritt 3 – Loader-Migration bewusst zurücknehmen
-
-`data.js` wurde testweise in `data.ts` umbenannt. Danach meldete TypeScript `TS7016` für die noch
-nicht migrierten Feature-Module. Außerdem hatte `showLoadingOverlay(msg)` ein implizites `any`.
-
-Wir haben weder `any` noch falsche Declaration-Dateien verwendet und `strict` nicht abgeschaltet.
-Darum wurde `data.ts` wieder zu `data.js`. Die vollständige Loader-Typisierung blieb bewusst für
-die komplette Migration offen. Dieser Punkt der Demo-6-Aufgabe war damit noch nicht abgeschlossen.
-
-### Schritt 4 – Echte Inkonsistenz in den Daten
+### Schritt 3 – Echte Inkonsistenz in den Daten
 
 Normalerweise enthält `personIds` IDs wie `"nova-byte"`. In Evidence `E04` steht aber der
 Anzeigename `"Nova Byte"`. JavaScript akzeptiert beide Werte ohne Prüfung.
