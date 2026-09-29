@@ -1,0 +1,28 @@
+{
+  "name": "mystery-road-awe-2026",
+  "version": "1.0.0",
+  "description": "Investigate the failure of an AI-assisted rehabilitation robot.",
+  "private": true,
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nexoc/mystery-road-awe-2026.git"
+  },
+  "keywords": [
+    "web-engineering",
+    "vite",
+    "typescript"
+  ],
+  "author": "Marat Davletshin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nexoc/mystery-road-awe-2026/issues"
+  },
+  "homepage": "https://github.com/Nexoc/mystery-road-awe-2026#readme",
+  "devDependencies": {
+    "vite": "^8.3.1"
+  }
+}
