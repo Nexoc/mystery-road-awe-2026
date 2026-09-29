@@ -1,0 +1,23 @@
+{
+  // TypeScript configuration for the Vite application
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "moduleResolution": "Bundler",
+
+    "sourceMap": true,
+    "noEmit": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  },
+
+  "include": ["src"]
+}
