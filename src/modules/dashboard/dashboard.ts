@@ -1,21 +1,22 @@
 import { state } from "../../app/state.js";
 import { formatDate, getStatusBadgeClass } from "../../shared/utils.js";
 
-const statCardHTML = (value, label) =>
+const statCardHTML = (value: number, label: string): string =>
   '<div class="stat-card"><div class="stat-value">' +
   value +
   '</div><div class="stat-label">' +
   label +
   "</div></div>";
 
-export function renderDashboard() {
+export function renderDashboard(): void {
   const container = document.getElementById("dashboardContent");
   if (!container) return;
 
   let reviewedCount = 0;
-  for (let i = 0; i < state.allEvidence.length; i++) {
-    if ((state.allEvidence[i].status || "").toLowerCase() === "reviewed")
+  for (const evidence of state.allEvidence) {
+    if ((evidence.status || "").toLowerCase() === "reviewed") {
       reviewedCount++;
+    }
   }
 
   const progressPct =
@@ -57,8 +58,7 @@ export function renderDashboard() {
   if (recentEvidence.length === 0) {
     html += "<p>No evidence loaded yet.</p>";
   }
-  for (let e = 0; e < recentEvidence.length; e++) {
-    const ev = recentEvidence[e];
+  for (const ev of recentEvidence) {
     html +=
       '<div class="mini-list-item"><strong>' +
       ev.id +
@@ -77,8 +77,7 @@ export function renderDashboard() {
   if (recentTimeline.length === 0) {
     html += "<p>No timeline events loaded yet.</p>";
   }
-  for (let t = 0; t < recentTimeline.length; t++) {
-    const evt = recentTimeline[t];
+  for (const evt of recentTimeline) {
     html +=
       '<div class="mini-list-item"><strong>' +
       formatDate(evt.time) +

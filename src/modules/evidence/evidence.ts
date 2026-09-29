@@ -13,66 +13,76 @@ import {
   getRelevanceBadgeClass,
   getStatusBadgeClass,
 } from "../../shared/utils.js";
+import type { Evidence } from "../../types.js";
 
 let evidenceViewLoading = true;
 let latestSearchRequestId = 0;
 
-export function finishEvidenceLoading() {
+export function finishEvidenceLoading(): void {
   evidenceViewLoading = false;
 }
 
-export function populateEvidenceDropdowns() {
+export function populateEvidenceDropdowns(): void {
   const typeSelect = document.getElementById("filterType");
   const personSelect = document.getElementById("filterPerson");
   const locationSelect = document.getElementById("filterLocation");
-  if (!typeSelect || !personSelect || !locationSelect) return;
+  if (
+    !(typeSelect instanceof HTMLSelectElement) ||
+    !(personSelect instanceof HTMLSelectElement) ||
+    !(locationSelect instanceof HTMLSelectElement)
+  ) {
+    return;
+  }
 
-  const types = [];
-  for (let i = 0; i < state.allEvidence.length; i++) {
-    const t = state.allEvidence[i].type.toLowerCase();
+  const types: string[] = [];
+  for (const evidence of state.allEvidence) {
+    const t = evidence.type.toLowerCase();
     if (types.indexOf(t) === -1) types.push(t);
   }
   typeSelect.innerHTML = '<option value="">All types</option>';
-  for (let ti = 0; ti < types.length; ti++) {
+  for (const type of types) {
     typeSelect.innerHTML +=
-      '<option value="' + types[ti] + '">' + types[ti] + "</option>";
+      '<option value="' + type + '">' + type + "</option>";
   }
 
   personSelect.innerHTML = '<option value="">All people</option>';
-  for (let p = 0; p < state.allPeople.length; p++) {
+  for (const person of state.allPeople) {
     personSelect.innerHTML +=
-      '<option value="' +
-      state.allPeople[p].id +
-      '">' +
-      state.allPeople[p].name +
-      "</option>";
+      '<option value="' + person.id + '">' + person.name + "</option>";
   }
 
   locationSelect.innerHTML = '<option value="">All locations</option>';
-  for (let l = 0; l < state.allLocations.length; l++) {
+  for (const location of state.allLocations) {
     locationSelect.innerHTML +=
       '<option value="' +
-      state.allLocations[l].id +
+      location.id +
       '">' +
-      state.allLocations[l].id +
+      location.id +
       " - " +
-      state.allLocations[l].name +
+      location.name +
       "</option>";
   }
 }
 
-function getFilteredEvidence() {
-  const searchBox = document.getElementById("evidenceSearch");
-  const searchTerm = searchBox ? searchBox.value.toLowerCase().trim() : "";
-  const typeVal = document.getElementById("filterType").value;
-  const personVal = document.getElementById("filterPerson").value;
-  const locationVal = document.getElementById("filterLocation").value;
-  const statusVal = document.getElementById("filterStatus").value;
-  const relevanceVal = document.getElementById("filterRelevance").value;
+function getSelectValue(id: string): string {
+  const select = document.getElementById(id);
+  return select instanceof HTMLSelectElement ? select.value : "";
+}
 
-  const results = [];
-  for (let i = 0; i < state.allEvidence.length; i++) {
-    const item = state.allEvidence[i];
+function getFilteredEvidence(): Evidence[] {
+  const searchBox = document.getElementById("evidenceSearch");
+  const searchTerm =
+    searchBox instanceof HTMLInputElement
+      ? searchBox.value.toLowerCase().trim()
+      : "";
+  const typeVal = getSelectValue("filterType");
+  const personVal = getSelectValue("filterPerson");
+  const locationVal = getSelectValue("filterLocation");
+  const statusVal = getSelectValue("filterStatus");
+  const relevanceVal = getSelectValue("filterRelevance");
+
+  const results: Evidence[] = [];
+  for (const item of state.allEvidence) {
     let matches = true;
 
     if (searchTerm) {
@@ -108,7 +118,7 @@ function getFilteredEvidence() {
   return results;
 }
 
-export function renderEvidenceList() {
+export function renderEvidenceList(): void {
   const container = document.getElementById("evidenceList");
   if (!container) return;
 
@@ -128,8 +138,8 @@ export function renderEvidenceList() {
   if (results.length === 0) {
     html = "<p>No evidence matches the current filters.</p>";
   }
-  for (let i = 0; i < results.length; i++) {
-    html += renderEvidenceCardHTML(results[i]);
+  for (const evidence of results) {
+    html += renderEvidenceCardHTML(evidence);
   }
   container.innerHTML = html;
 
@@ -137,8 +147,8 @@ export function renderEvidenceList() {
   container.addEventListener("click", handleEvidenceListClick);
 }
 
-function sortEvidence(items) {
-  const sortValue = document.getElementById("sortEvidence").value;
+function sortEvidence(items: Evidence[]): Evidence[] {
+  const sortValue = getSelectValue("sortEvidence");
   const sortedItems = items.slice();
 
   if (sortValue === "title-asc") {
@@ -151,18 +161,18 @@ function sortEvidence(items) {
     });
   } else if (sortValue === "date-asc") {
     sortedItems.sort(function (a, b) {
-      return new Date(a.timestamp) - new Date(b.timestamp);
+      return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
     });
   } else {
     sortedItems.sort(function (a, b) {
-      return new Date(b.timestamp) - new Date(a.timestamp);
+      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
     });
   }
 
   return sortedItems;
 }
 
-function renderEvidenceCardHTML(ev) {
+function renderEvidenceCardHTML(ev: Evidence): string {
   const isBookmarked = state.bookmarks.indexOf(ev.id) !== -1;
   let html = '<div class="evidence-card" data-id="' + ev.id + '">';
   html +=
@@ -202,30 +212,33 @@ function renderEvidenceCardHTML(ev) {
     ev.relevance +
     "</span>";
   html += "<div>";
-  for (let t = 0; t < ev.tags.length; t++) {
-    html += '<span class="tag-chip">' + ev.tags[t] + "</span>";
+  for (const tag of ev.tags) {
+    html += '<span class="tag-chip">' + tag + "</span>";
   }
   html += "</div>";
   html += "</div>";
   return html;
 }
 
-function handleEvidenceListClick(event) {
+function handleEvidenceListClick(event: MouseEvent): void {
   const target = event.target;
+  if (!(target instanceof HTMLElement)) return;
 
-  if (target.dataset && target.dataset.action === "bookmark") {
+  if (target.dataset.action === "bookmark") {
     event.stopPropagation();
-    handleBookmarkClick(target.dataset.id);
+    const evidenceId = target.dataset.id;
+    if (evidenceId) handleBookmarkClick(evidenceId);
     return;
   }
 
   const card = target.closest(".evidence-card");
   if (card) {
-    openEvidenceDetail(card.getAttribute("data-id"));
+    const evidenceId = card.getAttribute("data-id");
+    if (evidenceId) openEvidenceDetail(evidenceId);
   }
 }
 
-function handleBookmarkClick(evidenceId) {
+function handleBookmarkClick(evidenceId: string): void {
   const ev = findEvidenceById(evidenceId);
   if (!ev) return;
 
@@ -242,37 +255,49 @@ function handleBookmarkClick(evidenceId) {
   if (state.currentPage === "evidence") renderEvidenceList();
 }
 
-export function applyStoredBookmarkFlags() {
-  for (let i = 0; i < state.allEvidence.length; i++) {
-    state.allEvidence[i].bookmarked =
-      state.bookmarks.indexOf(state.allEvidence[i].id) !== -1;
+export function applyStoredBookmarkFlags(): void {
+  for (const evidence of state.allEvidence) {
+    evidence.bookmarked = state.bookmarks.indexOf(evidence.id) !== -1;
   }
 }
 
-export function handleSortChange() {
+export function handleSortChange(): void {
   renderEvidenceList();
 }
 
-export function clearFilters() {
-  document.getElementById("evidenceSearch").value = "";
-  document.getElementById("filterType").value = "";
-  document.getElementById("filterPerson").value = "";
-  document.getElementById("filterLocation").value = "";
-  document.getElementById("filterStatus").value = "";
-  document.getElementById("filterRelevance").value = "";
+function clearControlValue(id: string): void {
+  const control = document.getElementById(id);
+  if (
+    control instanceof HTMLInputElement ||
+    control instanceof HTMLSelectElement
+  ) {
+    control.value = "";
+  }
+}
+
+export function clearFilters(): void {
+  clearControlValue("evidenceSearch");
+  clearControlValue("filterType");
+  clearControlValue("filterPerson");
+  clearControlValue("filterLocation");
+  clearControlValue("filterStatus");
+  clearControlValue("filterRelevance");
   renderEvidenceList();
 }
 
-function simulateAsyncSearch(term) {
-  return new Promise(function (resolve) {
+function simulateAsyncSearch(term: string): Promise<string> {
+  return new Promise(function (resolve: (value: string) => void) {
     setTimeout(function () {
       resolve(term);
     }, 300);
   });
 }
 
-export function handleSearchInput(event) {
-  const term = event.target.value;
+export function handleSearchInput(event: Event): void {
+  const target = event.target;
+  if (!(target instanceof HTMLInputElement)) return;
+
+  const term = target.value;
   const requestId = ++latestSearchRequestId;
 
   simulateAsyncSearch(term).then(function () {
@@ -282,41 +307,44 @@ export function handleSearchInput(event) {
   });
 }
 
-export function openEvidenceDetail(evidenceId) {
+export function openEvidenceDetail(evidenceId: string): void {
   const ev = findEvidenceById(evidenceId);
   if (!ev) return;
 
   const section = document.getElementById("evidenceDetailSection");
+  if (!section) return;
   section.classList.remove("hidden");
 
   renderEvidenceDetail(ev);
   section.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-export function closeEvidenceDetail() {
+export function closeEvidenceDetail(): void {
   const section = document.getElementById("evidenceDetailSection");
+  if (!section) return;
   section.classList.add("hidden");
   section.innerHTML = "";
 }
 
-function renderEvidenceDetail(ev) {
+function renderEvidenceDetail(ev: Evidence): void {
   const section = document.getElementById("evidenceDetailSection");
+  if (!section) return;
 
-  const personNames = [];
-  for (let p = 0; p < ev.personIds.length; p++) {
-    const person = findPersonById(ev.personIds[p]);
-    personNames.push(person ? person.name : ev.personIds[p]);
+  const personNames: string[] = [];
+  for (const personId of ev.personIds) {
+    const person = findPersonById(personId);
+    personNames.push(person ? person.name : personId);
   }
 
-  const locationNames = [];
-  for (let l = 0; l < ev.locationIds.length; l++) {
-    const loc = findLocationById(ev.locationIds[l]);
-    locationNames.push(loc ? loc.id + " - " + loc.name : ev.locationIds[l]);
+  const locationNames: string[] = [];
+  for (const locationId of ev.locationIds) {
+    const loc = findLocationById(locationId);
+    locationNames.push(loc ? loc.id + " - " + loc.name : locationId);
   }
 
   let tagsHtml = "";
-  for (let t = 0; t < ev.tags.length; t++) {
-    tagsHtml += '<span class="tag-chip">' + ev.tags[t] + "</span>";
+  for (const tag of ev.tags) {
+    tagsHtml += '<span class="tag-chip">' + tag + "</span>";
   }
 
   const storedNote = loadNoteForEvidence(ev.id);
@@ -389,32 +417,44 @@ function renderEvidenceDetail(ev) {
 
   section.innerHTML = html;
 
-  document
-    .getElementById("detailStatusSelect")
-    .addEventListener("change", function (e) {
-      ev.status = e.target.value; // direct mutation of the loaded evidence object
+  const statusSelect = document.getElementById("detailStatusSelect");
+  if (statusSelect instanceof HTMLSelectElement) {
+    statusSelect.addEventListener("change", function (event: Event) {
+      const target = event.target;
+      if (!(target instanceof HTMLSelectElement)) return;
+      ev.status = target.value; // direct mutation of the loaded evidence object
       renderEvidenceDetail(ev);
       if (state.viewRendered.evidence) renderEvidenceList();
     });
-  document
-    .getElementById("detailRelevanceSelect")
-    .addEventListener("change", function (e) {
-      ev.relevance = e.target.value;
+  }
+
+  const relevanceSelect = document.getElementById("detailRelevanceSelect");
+  if (relevanceSelect instanceof HTMLSelectElement) {
+    relevanceSelect.addEventListener("change", function (event: Event) {
+      const target = event.target;
+      if (!(target instanceof HTMLSelectElement)) return;
+      ev.relevance = target.value;
       renderEvidenceDetail(ev);
       if (state.viewRendered.evidence) renderEvidenceList();
     });
+  }
 }
 
-function statusOptionHTML(current, value, label) {
+function statusOptionHTML(
+  current: string,
+  value: string,
+  label: string,
+): string {
   const currentLower = (current || "").toLowerCase();
   const selected = currentLower === value ? " selected" : "";
   return '<option value="' + value + '"' + selected + ">" + label + "</option>";
 }
 
-export function saveCurrentNote() {
+export function saveCurrentNote(): void {
   const textarea = document.getElementById("evidenceNoteInput");
-  if (!textarea) return;
+  if (!(textarea instanceof HTMLTextAreaElement)) return;
   const evidenceId = textarea.getAttribute("data-evidence-id"); // note id is read back off the DOM
+  if (!evidenceId) return;
   const text = textarea.value;
   saveNoteForEvidence(evidenceId, text);
   const preview = document.getElementById("notePreview");

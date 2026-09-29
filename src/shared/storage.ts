@@ -5,10 +5,7 @@ const STORAGE_KEY_NOTES = "remotion_notes";
 export const STORAGE_KEY_HYPOTHESIS = "remotion_hypothesis";
 
 export function saveBookmarksToStorage(): void {
-  localStorage.setItem(
-    STORAGE_KEY_BOOKMARKS,
-    JSON.stringify(state.bookmarks),
-  );
+  localStorage.setItem(STORAGE_KEY_BOOKMARKS, JSON.stringify(state.bookmarks));
 }
 
 export function loadBookmarksFromStorage(): void {
@@ -25,16 +22,10 @@ export function loadBookmarksFromStorage(): void {
   }
 }
 
-export function saveNoteForEvidence(
-  evidenceId: string,
-  text: string,
-): void {
+export function saveNoteForEvidence(evidenceId: string, text: string): void {
   state.notesStore[evidenceId] = text;
 
-  localStorage.setItem(
-    STORAGE_KEY_NOTES,
-    JSON.stringify(state.notesStore),
-  );
+  localStorage.setItem(STORAGE_KEY_NOTES, JSON.stringify(state.notesStore));
 }
 
 export function loadNoteForEvidence(evidenceId: string): string {
@@ -51,15 +42,10 @@ export function loadNotesFromStorage(): void {
 
   const parsed: unknown = JSON.parse(raw);
 
-  if (
-    typeof parsed === "object" &&
-    parsed !== null &&
-    !Array.isArray(parsed)
-  ) {
+  if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
     state.notesStore = Object.fromEntries(
       Object.entries(parsed).filter(
-        (entry): entry is [string, string] =>
-          typeof entry[1] === "string",
+        (entry): entry is [string, string] => typeof entry[1] === "string",
       ),
     );
   } else {

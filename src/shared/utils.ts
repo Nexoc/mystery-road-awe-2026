@@ -23,10 +23,7 @@ export function findLocationById(id: string): Location | null {
   return findById(state.allLocations, id);
 }
 
-export function evidenceMentionsPerson(
-  ev: Evidence,
-  person: Person,
-): boolean {
+export function evidenceMentionsPerson(ev: Evidence, person: Person): boolean {
   if (!ev.personIds) return false;
 
   return (
@@ -56,9 +53,7 @@ export function formatDate(ts: string | null | undefined): string {
   );
 }
 
-export function getStatusBadgeClass(
-  status: string | null | undefined,
-): string {
+export function getStatusBadgeClass(status: string | null | undefined): string {
   const s = (status || "").toLowerCase();
 
   if (s === "reviewed") return "badge-reviewed";

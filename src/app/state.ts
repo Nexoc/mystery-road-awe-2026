@@ -4,13 +4,14 @@ import type {
   Location,
   Person,
   TimelineEvent,
+  ViewName,
 } from "../types.js";
 
 export const state = {
   allEvidence: [] as Evidence[],
   filteredEvidence: [] as Evidence[],
   bookmarks: [] as string[],
-  currentPage: "dashboard",
+  currentPage: "dashboard" as ViewName,
 
   allPeople: [] as Person[],
   allLocations: [] as Location[],

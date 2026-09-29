@@ -10,7 +10,11 @@ export interface Evidence {
   tags: string[];
   status: string;
   relevance: string;
+  bookmarked?: boolean;
 }
+
+export type ViewName =
+  "dashboard" | "evidence" | "people" | "timeline" | "workspace";
 
 export interface CaseData {
   caseId: string;
