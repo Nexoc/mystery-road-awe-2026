@@ -1,4 +1,10 @@
-import type { Evidence, Location, Person } from "../types.js";
+import type {
+  CaseData,
+  Evidence,
+  Location,
+  Person,
+  TimelineEvent,
+} from "../types.js";
 
 export const state = {
   allEvidence: [] as Evidence[],
@@ -8,8 +14,8 @@ export const state = {
 
   allPeople: [] as Person[],
   allLocations: [] as Location[],
-  allTimeline: [],
-  caseData: {},
+  allTimeline: [] as TimelineEvent[],
+  caseData: {} as CaseData,
 
   viewRendered: {
     dashboard: false,

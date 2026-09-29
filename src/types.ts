@@ -12,6 +12,18 @@ export interface Evidence {
   relevance: string;
 }
 
+export interface CaseData {
+  caseId: string;
+  title: string;
+  subtitle: string;
+  status: string;
+  opened: string;
+  summary: string;
+  location: string;
+  leadInvestigator: string;
+  notes: string;
+}
+
 export interface Person {
   id: string;
   name: string;
@@ -28,4 +40,16 @@ export interface Location {
   name: string;
   description: string;
   contains: string[];
+}
+
+export interface TimelineEvent {
+  id: string;
+  time: string;
+  title: string;
+  description: string;
+  type: string;
+  certainty: string;
+  personIds: string[];
+  locationIds: string[];
+  evidenceIds: string[];
 }
