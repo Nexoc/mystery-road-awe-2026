@@ -59,7 +59,7 @@ verändert keine Source-Dateien und verwendet deshalb nicht `lint:fix` oder `pre
 In `package.json` wurde ein nicht veränderndes Script ergänzt:
 
 ```json
-"format:check": "prettier --check \"src/**/*.{js,ts}\" \"*.{js,json,html,css}\""
+"format:check": "prettier --check \"src/**/*.{js,ts}\" \"*.{js,ts,json,html,css}\""
 ```
 
 `.prettierrc.json` verwendet `endOfLine: auto`, damit LF und Windows-CRLF nicht zu unnötigen
@@ -67,12 +67,9 @@ Unterschieden führen.
 
 ## Failed/Passed-Demonstration
 
-1. Einen sichtbaren Format- oder Lint-Fehler erstellen.
-2. Commit und Push ausführen.
-3. Den fehlgeschlagenen Workflow und den betroffenen Step zeigen.
-4. Den Fehler lokal korrigieren.
-5. Erneut committen und pushen.
-6. Den erfolgreichen Workflow mit denselben Steps zeigen.
+Im Commit `0fc4b48` wurde absichtlich ein Formatfehler in `package.json` gepusht. Der Step
+`Check formatting` erkannte ihn und der Workflow schlug fehl. Commit `7048ad0` korrigierte die
+Formatierung; danach lief derselbe Workflow mit denselben Steps erfolgreich durch.
 
 ## Begriffe
 

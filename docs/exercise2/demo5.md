@@ -76,12 +76,14 @@ npm run dev
 
 Ergebnis: 11 → 10 → 0 TypeScript-Fehler. Dashboard, Evidence und People liefen weiter.
 Im Demo-5-Commit wurde `tsc` noch separat ausgeführt; das damalige `build`-Script startete nur Vite.
+Die Integration in das Build-Tooling wurde in Demo 7 abgeschlossen. Aktuell startet `npm run build`
+zuerst `npm run typecheck` und nur bei Erfolg danach `vite build`.
 
 ## Antworten auf die Fragen
 
-- Ein Compile-Time-Fehler entsteht vor dem Start, ein Runtime-Fehler erst im Browser. TypeScript
-  kann falsche Variablen- oder DOM-Typen finden, aber nicht jede falsche Fachlogik oder jeden
-  fehlerhaften Wert aus externem JSON.
+- Den Off-by-one-Fehler im Navigations-Loop hätte `noUncheckedIndexedAccess` durch den möglichen
+  Wert `undefined` sichtbar machen können. Fehlerhafte Lade-Reihenfolgen, überschriebene Sortierung
+  und ungültige Runtime-Daten erkennt TypeScript allein dagegen nicht zuverlässig.
 - `any` schaltet die Typprüfung für diesen Wert praktisch aus und verteilt Unsicherheit weiter.
   Deshalb wurden Generics, konkrete Domain-Typen und `unknown` mit Prüfungen verwendet.
 - `noEmit` ist passend, weil Vite den Build erzeugt; TypeScript prüft hier nur die Typen.

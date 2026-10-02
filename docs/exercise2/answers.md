@@ -39,7 +39,7 @@
 ## Demo 4 – ESLint und Prettier
 
 1. **Was ist der Unterschied zwischen Linter und Formatter?**  
-   ESLint fand unbenutzte Werte wie `selectedEvidence`. Prettier änderte nur Formatierung wie Einrückung, Abstände und Zeilenumbrüche.
+   ESLint fand unbenutzte Werte wie `selectedEvidence`. Prettier änderte konkret `"private" : true` zu `"private": true`, ohne die Logik zu verändern.
 
 2. **Warum gibt es `lint` und `lint:fix` getrennt?**  
    `lint` prüft ohne Änderungen und passt zu Reviews oder CI. `lint:fix` verändert nur automatisch lösbare Stellen; logische Fehler brauchen eine Entscheidung.
@@ -53,7 +53,7 @@
    Unter anderem `noImplicitAny` und `strictNullChecks`. Fehlende Typen und mögliche `null`-Werte werden dadurch früh sichtbar.
 
 2. **Compile-Time-Fehler oder Runtime-Fehler?**  
-   TypeScript kann falsche Variablen- und Werttypen vor dem Start finden. Falsche Lade-Reihenfolgen oder Fachlogik müssen weiterhin im Browser getestet werden.
+   `noUncheckedIndexedAccess` hätte den Off-by-one-Zugriff auf `navButtons` als möglicherweise `undefined` erkannt. Lade-Reihenfolgen, Sortierlogik und ungültige Runtime-Daten brauchen weiterhin Tests.
 
 3. **Warum wurde kein `any` benutzt?**  
    `any` schaltet die Prüfung für einen Wert praktisch aus. Konkrete Typen, Generics und `unknown` mit Prüfungen erhalten die Typsicherheit.
@@ -78,4 +78,4 @@
    Nur kurzfristig an einer wirklich untypisierten Fremd-Schnittstelle. In diesem Projekt wurden JSON und `localStorage` als `unknown` behandelt und geprüft.
 
 3. **Wurde ein echtes Problem gefunden?**  
-   Ja. `bookmarked` wurde zur Laufzeit an Evidence-Objekte geschrieben, fehlte aber im Modell. `bookmarked?: boolean` bildet den echten Zustand jetzt ab.
+   Der Compiler fand keinen sicher reproduzierten Runtime-Bug. Bei der Production-Prüfung fehlten aber die Personenbilder in `dist`; `bookmarked` war dagegen eine echte Inkonsistenz zwischen Laufzeit und Typmodell.

@@ -45,6 +45,10 @@ TypeScript prüft Quellcode, aber nicht automatisch den Inhalt einer Datei, die 
 `fetch()` geladen wird. Dafür braucht man Type Guards oder einen Schema-Validator. Erst danach darf
 das Ergebnis sicher als `Evidence[]`, `Person[]` usw. verwendet werden.
 
+Die Migration von `data.js` wurde wegen seiner Abhängigkeiten erst in Demo 7 abgeschlossen. Im
+finalen `data.ts` liefert `readJson()` zuerst `unknown`. Type Guards prüfen die Struktur der
+JSON-Daten, bevor sie dem typisierten State zugewiesen werden.
+
 ## `interface` und `type`
 
 Ein `interface` beschreibt gut erweiterbare Objektformen und kann durch weitere Deklarationen

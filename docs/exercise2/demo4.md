@@ -73,6 +73,9 @@ zurückgenommen. Danach wurde der Bereich bewusst begrenzt:
 "format": "prettier --write \"src/**/*.{js,ts}\" \"*.{js,json,html,css}\""
 ```
 
+Ein konkreter Prettier-Fund in `package.json` war `"private" : true`. Prettier änderte diese Zeile
+zu `"private": true`. Nur der Abstand änderte sich, nicht die Bedeutung.
+
 ## Antworten auf die Fragen
 
 - Ein Linter findet mögliche Fehler, zum Beispiel unbenutzte Variablen. Ein Formatter ändert
