@@ -5,25 +5,18 @@
 Nach jedem Push auf `exercise-2` wird die Anwendung geprüft, gebaut und automatisch auf GitHub
 Pages veröffentlicht.
 
-## Workflow
+## Schritt 1 – Pages aktivieren
 
-Der zweite Workflow liegt unter:
+Im Repository wurde unter `Settings → Pages → Build and deployment` die Source `GitHub Actions`
+gewählt. Die angebotenen Jekyll- und Static-HTML-Workflows wurden nicht verwendet, weil das Projekt
+einen eigenen Vite Build braucht.
 
-```text
-.github/workflows/deploy.yml
-```
+## Schritt 2 – Workflow erstellen
 
-Er startet bei:
+Der zweite Workflow liegt in `.github/workflows/deploy.yml`. Er startet bei einem Push auf
+`exercise-2` oder manuell über `workflow_dispatch`. Pull Requests deployen nicht.
 
-- Push auf `exercise-2`
-- manuellem Start mit `workflow_dispatch`
-
-Ein Pull Request löst kein Deployment aus, weil ungeprüfter PR-Code nicht veröffentlicht werden
-soll.
-
-## Build-Job
-
-Der Job `build` führt diese Schritte aus:
+Der Job `build` führt aus:
 
 ```text
 Checkout
@@ -35,52 +28,67 @@ npm run build
 Upload von dist/ als github-pages Artifact
 ```
 
-`npm run build` startet zuerst TypeScript mit `tsc --noEmit` und danach den Vite Build.
+`npm run build` startet `tsc --noEmit` und danach den Vite Production-Build.
 
-## Vite Base Path
+## Schritt 3 – Vite Base Path setzen
 
-Die Pages-Adresse enthält den Repository-Namen:
-
-```text
-https://nexoc.github.io/mystery-road-awe-2026/
-```
-
-Darum setzt `vite.config.ts`:
+Die Pages-Adresse enthält den Repository-Namen. Deshalb setzt `vite.config.ts`:
 
 ```ts
 base: "/mystery-road-awe-2026/";
 ```
 
-So zeigen JavaScript, CSS, JSON-Dateien und Bilder auf den richtigen Unterpfad.
+Der Build erzeugt dadurch Pfade wie `/mystery-road-awe-2026/assets/...`. JSON-Dateien und Bilder
+werden ebenfalls unter dem Repository-Pfad geladen.
 
-## Deploy-Job
+## Schritt 4 – Artifact deployen
 
 Der Job `deploy` läuft nur nach einem erfolgreichen `build`. `upload-pages-artifact` packt `dist/`
-als Artifact. `deploy-pages` veröffentlicht dieses Artifact über die GitHub Pages API. Es wird kein
-`gh-pages` Branch erzeugt.
+als Artifact. `deploy-pages` veröffentlicht dieses Artifact über die Pages API. Ein `gh-pages`
+Branch wird nicht erstellt.
 
 Benötigte Rechte:
 
 - `contents: read` und `pages: read` für den Build
-- `pages: write` für die Veröffentlichung
-- `id-token: write` für die sichere OIDC-Prüfung
+- `pages: write` für das Deployment
+- `id-token: write` für die OIDC-Prüfung
 
-Ein eigenes Secret ist dafür nicht nötig. GitHub stellt `GITHUB_TOKEN` automatisch bereit.
+Ein eigenes Secret ist nicht nötig. GitHub stellt `GITHUB_TOKEN` bereit.
 
-## Warum erneut prüfen und bauen?
+## Schritt 5 – Ersten Workflow-Run korrigieren
 
-Der Deploy-Workflow läuft auf einem neuen, sauberen Runner. Ergebnisse aus Demo 8 werden nicht
-automatisch übernommen. Deshalb prüft der Workflow genau den Commit, der veröffentlicht wird.
+Der erste `Check and build` Job war nach 19 Sekunden erfolgreich. Der Deploy-Job wurde aber durch
+die Environment-Regel abgelehnt:
 
-## Anderer Static Host
+```text
+Branch "exercise-2" is not allowed to deploy to github-pages.
+```
 
-Checkout, Installation, Lint und Build bleiben gleich. Nur die Pages-Schritte, Rechte, Zugangsdaten
-und eventuell der Vite Base Path werden für Netlify, Vercel oder SFTP ersetzt.
+Im Environment `github-pages` war nur `main` erlaubt. Unter
+`Settings → Environments → github-pages → Deployment branches and tags` wurde zusätzlich die Branch
+Rule `exercise-2` eingetragen. Danach wurde nur der fehlgeschlagene Job erneut gestartet. Dafür war
+kein neuer Commit nötig.
+
+![Erlaubte Deployment-Branches main und exercise-2](pictures/9.png)
+
+## Ergebnis
+
+Der zweite Deploy-Versuch war nach 7 Sekunden erfolgreich. Die Anwendung öffnete sich unter:
+
+```text
+https://nexoc.github.io/mystery-road-awe-2026/
+```
+
+## Antworten
+
+Der Workflow prüft und baut erneut, weil jeder Workflow auf einem neuen Runner läuft. Ergebnisse aus
+Demo 8 werden nicht automatisch übernommen. So wird genau der Commit gebaut, der online geht.
+
+Bei einem anderen Static Host bleiben Checkout, Installation, Lint und Build gleich. Nur die
+Pages-Schritte, Rechte, Zugangsdaten und eventuell der Vite Base Path ändern sich.
 
 ## Live-Demo
 
-1. In GitHub unter `Settings → Pages` als Source `GitHub Actions` wählen.
-2. Workflow pushen und den erfolgreichen Deploy öffnen.
-3. Dashboard, Evidence, People, Timeline und Workspace testen.
-4. Im Network-Tab JSON-Dateien und Personenbilder mit Status `200` prüfen.
-5. Eine sichtbare Änderung pushen und prüfen, dass sie ohne manuellen Deploy online erscheint.
+1. Dashboard, Evidence, People, Timeline und Workspace öffnen.
+2. In DevTools JSON-Dateien und Personenbilder mit Status `200` zeigen.
+3. Eine sichtbare Änderung pushen und prüfen, dass sie automatisch online erscheint.
