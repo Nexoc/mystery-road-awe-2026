@@ -98,7 +98,7 @@ function initApp(): void {
 
   loadAllData().then(function () {
     handleHashChange();
-    const firstNote = loadNoteAsync(101);
+    const firstNote = loadNoteAsync("E01");
     console.log("First note preview:", firstNote);
   });
 }
