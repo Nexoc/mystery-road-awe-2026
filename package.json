@@ -36,6 +36,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"src/**/*.{js,ts}\" \"*.{js,json,html,css}\""
+    "format": "prettier --write \"src/**/*.{js,ts}\" \"*.{js,json,html,css}\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts}\" \"*.{js,json,html,css}\""
   }
 }
