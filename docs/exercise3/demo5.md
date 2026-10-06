@@ -2,27 +2,12 @@
 
 ## Ziel
 
-Ich zeige an einer kleinen Komponente, was React, JSX und eine pure Component Function bedeuten.
-Der React-Einstiegspunkt und die Migration des Projekts beginnen erst in Demo 6.
+Ich zeige an einer kleinen Komponente React, JSX und pure Functions. Die Projektmigration beginnt erst in Demo 6.
 
 ## Praktisches Beispiel
 
-Der selbst geschriebene Code liegt in [CaseTitle.tsx](CaseTitle.tsx):
-
-```tsx
-export function CaseTitle() {
-  const title = "Project ReMotion";
-
-  return (
-    <section>
-      <h2>{title}</h2>
-      <p>Investigation Portal</p>
-    </section>
-  );
-}
-```
-
-Die Datei ist ein eigenständiges Lernbeispiel unter `docs/`. Sie wird noch nicht von Vite eingebunden
+Der selbst geschriebene Code liegt in [CaseTitle.tsx](CaseTitle.tsx). Die Datei ist ein eigenständiges
+Lernbeispiel unter `docs/`. Sie wird noch nicht von Vite eingebunden
 oder im Browser gemountet; das folgt in Demo 6. Die Funktion verwendet weder Props noch State und
 verändert den DOM nicht direkt.
 
@@ -30,11 +15,36 @@ verändert den DOM nicht direkt.
 
 Eine Function Component ist eine Funktion, die React während des Renderings aufruft. Sie beschreibt
 einen Teil der gewünschten UI aus ihren Inputs. Wiederverwendung ist ein Vorteil, aber keine Pflicht.
-Der Großbuchstabe in `CaseTitle` unterscheidet die Komponente von nativen HTML-Tags.
+Der Großbuchstabe in `CaseTitle` unterscheidet die Komponente von nativen HTML-Tags. Der Ablauf ist:
+`JavaScript-Wert → Component Function → JSX → React Elements → DOM`.
 
-```text
-JavaScript-Wert → Component Function → JSX → React Elements → DOM
+## Imperativer und deklarativer Stil
+
+Vanilla JavaScript beschreibt einzelne DOM-Befehle:
+
+```js
+status.textContent = "Reviewed";
+status.classList.add("status--complete");
+button.disabled = true;
 ```
+
+React beschreibt dagegen das gewünschte Ergebnis für die aktuellen Daten:
+
+```tsx
+function ReviewStatus({ reviewed }: { readonly reviewed: boolean }) {
+  return (
+    <>
+      <span className={reviewed ? "status status--complete" : "status"}>
+        {reviewed ? "Reviewed" : "Pending"}
+      </span>
+      <button disabled={reviewed}>Mark reviewed</button>
+    </>
+  );
+}
+```
+
+Imperativ bedeutet: **wie** der DOM geändert wird. Deklarativ bedeutet: **wie** die UI für einen
+bestimmten Zustand aussehen soll. React berechnet daraus die notwendigen DOM-Änderungen.
 
 ## Was ist JSX?
 
