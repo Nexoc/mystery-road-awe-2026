@@ -103,5 +103,12 @@ function initApp(): void {
   });
 }
 
-window.addEventListener("DOMContentLoaded", initApp);
+// window.addEventListener("DOMContentLoaded", initApp);
+
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", initApp, { once: true });
+} else {
+  initApp();
+}
+
 window.addEventListener("hashchange", handleHashChange);

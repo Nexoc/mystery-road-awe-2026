@@ -12,7 +12,7 @@ const browserGlobals = {
 
 const typescriptRecommended = tseslint.configs.recommended.map((config) => ({
   ...config,
-  files: ["**/*.ts"],
+  files: ["**/*.{ts,tsx}"],
 }));
 
 export default [
