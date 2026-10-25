@@ -57,3 +57,12 @@ export interface TimelineEvent {
   locationIds: string[];
   evidenceIds: string[];
 }
+
+export interface InvestigationData {
+  caseData: CaseData;
+  evidence: readonly Evidence[];
+  people: readonly Person[];
+  locations: readonly Location[];
+  timeline: readonly TimelineEvent[];
+  bookmarkIds: readonly string[];
+}
