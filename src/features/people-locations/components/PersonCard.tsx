@@ -13,6 +13,13 @@ export function PersonCard({ person }: PersonCardProps) {
     personName: person.name,
   });
 
+  const hasResponsibilities = person.responsibilities.length > 0;
+  debugLog("4.2", "CONDITIONAL → responsibilities evaluated", {
+    personId: person.id,
+    responsibilitiesCount: person.responsibilities.length,
+    hasResponsibilities,
+  });
+
   return (
     <article className="person-card">
       <div className="person-card-header">
@@ -31,6 +38,18 @@ export function PersonCard({ person }: PersonCardProps) {
       <p>
         <strong>Speciality:</strong> {person.speciality}
       </p>
+
+      {hasResponsibilities && (
+        <div className="person-responsibilities">
+          <strong>Responsibilities:</strong>
+
+          <ul>
+            {person.responsibilities.map((responsibility) => (
+              <li key={responsibility}>{responsibility}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="person-statement">&ldquo;{person.statement}&rdquo;</div>
     </article>

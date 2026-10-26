@@ -228,6 +228,8 @@ export function App({ data }: AppProps) {
           <DashboardPage data={data} />
         ) : currentView === "people" ? (
           <PeopleLocationsPage
+            // people={[]}
+            // locations={[]}
             people={data.people}
             locations={data.locations}
           />
