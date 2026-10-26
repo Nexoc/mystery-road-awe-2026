@@ -4,6 +4,7 @@ import type { InvestigationData } from "../../types.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
 import { KeyIdentityDemo } from "../features/key-identity/KeyIdentityDemo.js";
 import { PeopleLocationsLayout } from "../features/people-locations/PeopleLocationsLayout.js";
+import { PersonDetailsPage } from "../features/people-locations/PersonDetailsPage.js";
 import { LocationsSection } from "../features/people-locations/components/LocationsSection.js";
 import { PeopleSection } from "../features/people-locations/components/PeopleSection.js";
 import { TimelinePage } from "../features/timeline/TimelinePage.js";
@@ -62,6 +63,11 @@ export function AppRoutes({ data }: AppRoutesProps) {
         <Route index element={<Navigate to="people" replace />} />
 
         <Route path="people" element={<PeopleSection people={data.people} />} />
+
+        <Route
+          path="people/:personId"
+          element={<PersonDetailsPage people={data.people} />}
+        />
 
         <Route
           path="locations"

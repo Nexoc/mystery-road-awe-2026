@@ -670,6 +670,35 @@ a:focus-visible {
   color: var(--color-text-muted);
 }
 
+.person-details-link,
+.person-details-actions a {
+  color: var(--color-accent-dark);
+  font-weight: 700;
+}
+
+.person-details-link {
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.person-details-actions {
+  margin-bottom: 16px;
+}
+
+.person-details-card {
+  max-width: 900px;
+}
+
+.person-details-background {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
+}
+
+.person-details-background p {
+  margin-bottom: 0;
+}
+
 .evidence-count-link {
   background: none;
   border: none;

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { debugLog } from "../../../../shared/debug.js";
 import type { Person } from "../../../../types.js";
 
@@ -52,6 +53,18 @@ export function PersonCard({ person }: PersonCardProps) {
       )}
 
       <div className="person-statement">&ldquo;{person.statement}&rdquo;</div>
+
+      <Link
+        className="person-details-link"
+        to={`/team/people/${person.id}`}
+        onClick={() => {
+          debugLog("4.9", "PERSON CARD → details link selected", {
+            personId: person.id,
+          });
+        }}
+      >
+        View details
+      </Link>
     </article>
   );
 }
