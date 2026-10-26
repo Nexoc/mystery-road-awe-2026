@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { HashRouter } from "react-router-dom";
 import { debugLog } from "../shared/debug.js";
 import { loadInvestigationData } from "./data.js";
 
@@ -25,8 +26,12 @@ debugLog("3.10", "REACT ENTRY → investigation data ready", {
 
 debugLog("3.9", "REACT ENTRY → React render requested");
 
+debugLog("4.8", "ROUTER → HashRouter enabled");
+
 createRoot(container).render(
   <StrictMode>
-    <App data={data} />
+    <HashRouter>
+      <App data={data} />
+    </HashRouter>
   </StrictMode>,
 );

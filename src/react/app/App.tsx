@@ -1,112 +1,49 @@
-import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 import { debugLog } from "../../shared/debug.js";
-import type { InvestigationData, ViewName } from "../../types.js";
-import { DashboardPage } from "../features/dashboard/DashboardPage.js";
-import { PeopleLocationsPage } from "../features/people-locations/PeopleLocationsPage.js";
-import { TimelinePage } from "../features/timeline/TimelinePage.js";
+import type { InvestigationData } from "../../types.js";
+import { AppRoutes } from "./routes.js";
 
-type NavigationItem = {
-  view: ViewName;
+type NavigationItem = Readonly<{
+  to: string;
   label: string;
-};
+  end: boolean;
+}>;
 
 const navigationItems: readonly NavigationItem[] = [
-  { view: "dashboard", label: "Dashboard" },
-  { view: "evidence", label: "Evidence" },
-  { view: "people", label: "People & Locations" },
-  { view: "timeline", label: "Timeline" },
-  { view: "workspace", label: "Workspace" },
+  { to: "/dashboard", label: "Dashboard", end: true },
+  { to: "/evidence", label: "Evidence", end: true },
+  { to: "/team", label: "People & Locations", end: false },
+  { to: "/timeline", label: "Timeline", end: true },
+  { to: "/workspace", label: "Workspace", end: true },
 ];
 
-type PageDefinition = {
-  title: string;
-  description: string;
-};
-
-const pageDefinitions: Record<ViewName, PageDefinition> = {
-  dashboard: {
-    title: "Case Dashboard",
-    description: "The Dashboard is rendered from the investigation data.",
-  },
-  evidence: {
-    title: "Evidence Catalogue",
-    description: "The Evidence view will be migrated in Exercise 5.",
-  },
-  people: {
-    title: "People & Locations",
-    description: "The People & Locations view will be migrated in Exercise 4.",
-  },
-  timeline: {
-    title: "Investigation Timeline",
-    description: "The Timeline view will be migrated in Exercise 4.",
-  },
-  workspace: {
-    title: "Investigator Workspace",
-    description: "The Workspace view will be migrated in Exercise 5.",
-  },
-};
-
-function isViewName(value: string): value is ViewName {
-  return navigationItems.some((item) => item.view === value);
-}
-
-function getViewFromHash(): ViewName {
-  const hashValue = window.location.hash.slice(1);
-  const isKnownView = isViewName(hashValue);
-
-  const resolvedView: ViewName = isKnownView ? hashValue : "dashboard";
-
-  debugLog("3.9", "ROUTER → hash resolved", {
-    originalHash: window.location.hash,
-    hashValue,
-    isKnownView,
-    resolvedView,
-    usedFallback: !isKnownView,
-  });
-
-  return resolvedView;
-}
-
-type NavigationProps = {
-  currentView: ViewName;
-};
-
-function Navigation({ currentView }: NavigationProps) {
-  debugLog("3.9", "NAVIGATION → rendering active item", {
-    currentView,
-  });
+function Navigation() {
+  debugLog("4.8", "NAVIGATION → React Router links rendered");
 
   return (
     <nav className="main-nav" aria-label="Main navigation">
-      {navigationItems.map((item) => {
-        const isActive = item.view === currentView;
-
-        return (
-          <a
-            key={item.view}
-            href={`#${item.view}`}
-            className={isActive ? "nav-btn active" : "nav-btn"}
-            aria-current={isActive ? "page" : undefined}
-            onClick={() => {
-              debugLog("3.9", "NAVIGATION → link selected", {
-                fromView: currentView,
-                toView: item.view,
-              });
-            }}
-          >
-            {item.label}
-          </a>
-        );
-      })}
+      {navigationItems.map((item) => (
+        <NavLink
+          key={item.to}
+          to={item.to}
+          end={item.end}
+          className={({ isActive }) =>
+            isActive ? "nav-btn active" : "nav-btn"
+          }
+          onClick={() => {
+            debugLog("4.8", "NAVIGATION → NavLink selected", {
+              destination: item.to,
+            });
+          }}
+        >
+          {item.label}
+        </NavLink>
+      ))}
     </nav>
   );
 }
 
-type HeaderProps = {
-  currentView: ViewName;
-};
-
-function Header({ currentView }: HeaderProps) {
+function Header() {
   const logoUrl = `${import.meta.env.BASE_URL}assets/logo/logo.svg`;
 
   return (
@@ -126,32 +63,10 @@ function Header({ currentView }: HeaderProps) {
             </p>
           </div>
         </div>
-        <Navigation currentView={currentView} />
+
+        <Navigation />
       </div>
     </header>
-  );
-}
-
-type ViewPageProps = {
-  currentView: ViewName;
-};
-
-function ViewPage({ currentView }: ViewPageProps) {
-  const page = pageDefinitions[currentView];
-
-  debugLog("3.9", "VIEW → page content selected", {
-    currentView,
-    title: page.title,
-  });
-
-  return (
-    <section>
-      <h2>{page.title}</h2>
-
-      <div className="intro-card">
-        <p>{page.description}</p>
-      </div>
-    </section>
   );
 }
 
@@ -166,77 +81,21 @@ function Footer() {
   );
 }
 
-type AppProps = {
+type AppProps = Readonly<{
   data: InvestigationData;
-};
+}>;
 
 export function App({ data }: AppProps) {
-  const [currentView, setCurrentView] = useState<ViewName>(() => {
-    const initialView = getViewFromHash();
-
-    debugLog("3.9", "STATE → initial currentView created", {
-      initialView,
-    });
-
-    return initialView;
-  });
-
-  useEffect(() => {
-    function handleHashChange(event: HashChangeEvent): void {
-      debugLog("3.9", "HASHCHANGE → browser event received", {
-        previousHash: new URL(event.oldURL).hash,
-        nextHash: new URL(event.newURL).hash,
-      });
-
-      const nextView = getViewFromHash();
-
-      debugLog("3.9", "STATE → currentView update requested", {
-        nextView,
-      });
-
-      setCurrentView(nextView);
-    }
-
-    window.addEventListener("hashchange", handleHashChange);
-
-    debugLog("3.9", "EFFECT → subscribed to hashchange");
-
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange);
-
-      debugLog("3.9", "EFFECT → removed hashchange listener");
-    };
-  }, []);
-
-  debugLog("3.9", "APP → component function executed", {
-    currentHash: window.location.hash,
-    currentView,
-  });
-
-  debugLog("3.10", "PROPS → App rendering with investigation data", {
+  debugLog("4.8", "APP → router-controlled shell rendered", {
     caseId: data.caseData.caseId,
-    evidenceCount: data.evidence.length,
-    timelineCount: data.timeline.length,
-    currentView,
   });
 
   return (
     <>
-      <Header currentView={currentView} />
+      <Header />
 
       <main className="app-main">
-        {currentView === "dashboard" ? (
-          <DashboardPage data={data} />
-        ) : currentView === "people" ? (
-          <PeopleLocationsPage
-            people={data.people}
-            locations={data.locations}
-          />
-        ) : currentView === "timeline" ? (
-          <TimelinePage events={data.timeline} />
-        ) : (
-          <ViewPage currentView={currentView} />
-        )}
+        <AppRoutes data={data} />
       </main>
 
       <Footer />
