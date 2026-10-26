@@ -1,5 +1,5 @@
-import { debugLog } from "../../../shared/debug.js";
-import type { Location } from "../../../types.js";
+import { debugLog } from "../../../../shared/debug.js";
+import type { Location } from "../../../../types.js";
 
 type LocationCardProps = Readonly<{
   location: Location;

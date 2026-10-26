@@ -1,5 +1,5 @@
-import { debugLog } from "../../../shared/debug.js";
-import type { Location } from "../../../types.js";
+import { debugLog } from "../../../../shared/debug.js";
+import type { Location } from "../../../../types.js";
 import { ContentPanel } from "./ContentPanel.js";
 import { LocationCard } from "./LocationCard.js";
 
@@ -7,9 +7,7 @@ type LocationsSectionProps = Readonly<{
   locations: readonly Location[];
 }>;
 
-export function LocationsSection({
-  locations,
-}: LocationsSectionProps) {
+export function LocationsSection({ locations }: LocationsSectionProps) {
   const hasLocations = locations.length > 0;
 
   debugLog(
@@ -26,10 +24,7 @@ export function LocationsSection({
       {hasLocations ? (
         <div className="locations-grid">
           {locations.map((location) => (
-            <LocationCard
-              key={location.id}
-              location={location}
-            />
+            <LocationCard key={location.id} location={location} />
           ))}
         </div>
       ) : (

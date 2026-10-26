@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { debugLog } from "../../../shared/debug.js";
+import { debugLog } from "../../../../shared/debug.js";
 
 type ContentPanelProps = Readonly<{
   title: string;

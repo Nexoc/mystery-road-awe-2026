@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
-import { debugLog } from "../../shared/debug.js";
+import { debugLog } from "../../../shared/debug.js";
 import type {
   CaseData,
   Evidence,
   InvestigationData,
   TimelineEvent,
-} from "../../types.js";
+} from "../../../types.js";
 
 type DashboardPageProps = Readonly<{
   data: InvestigationData;

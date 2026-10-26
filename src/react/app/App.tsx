@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { debugLog } from "../../shared/debug.js";
+import type { InvestigationData, ViewName } from "../../types.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
 import { PeopleLocationsPage } from "../features/people-locations/PeopleLocationsPage.js";
 import { TimelinePage } from "../features/timeline/TimelinePage.js";
-import { debugLog } from "../shared/debug.js";
-import type { InvestigationData, ViewName } from "../types.js";
 
 type NavigationItem = {
   view: ViewName;
@@ -225,7 +225,6 @@ export function App({ data }: AppProps) {
       <Header currentView={currentView} />
 
       <main className="app-main">
-
         {currentView === "dashboard" ? (
           <DashboardPage data={data} />
         ) : currentView === "people" ? (
@@ -238,7 +237,6 @@ export function App({ data }: AppProps) {
         ) : (
           <ViewPage currentView={currentView} />
         )}
-
       </main>
 
       <Footer />

@@ -1,26 +1,26 @@
-import { debugLog } from "../../shared/debug.js";
-import type { TimelineEvent } from "../../types.js";
+import { debugLog } from "../../../shared/debug.js";
+import type { TimelineEvent } from "../../../types.js";
 import { TimelineEventCard } from "./components/TimelineEventCard.js";
 
 type TimelinePageProps = Readonly<{
-    events: readonly TimelineEvent[];
+  events: readonly TimelineEvent[];
 }>;
 
 export function TimelinePage({ events }: TimelinePageProps) {
-    const hasEvents = events.length > 0;
+  const hasEvents = events.length > 0;
 
-    debugLog("4.3", "TIMELINE LIST → collection received", {
+  debugLog("4.3", "TIMELINE LIST → collection received", {
     eventCount: events.length,
     eventIds: events.map((event) => event.id),
-    });
+  });
 
-    return (
+  return (
     <section>
-        <h2>Investigation Timeline</h2>
+      <h2>Investigation Timeline</h2>
 
-        {hasEvents ? (
+      {hasEvents ? (
         <div className="timeline-container">
-            {/*
+          {/*
             1. events — весь массив событий.
             2. map берёт из массива одно событие за раз.
             3. Текущее событие называется event.
@@ -29,16 +29,13 @@ export function TimelinePage({ events }: TimelinePageProps) {
             6. key содержит стабильный ID для React.
             7. map возвращает массив React-компонентов.
             */}
-            {events.map((event) => (
-            <TimelineEventCard
-                key={event.id}
-                event={event}
-            />
-        ))}
+          {events.map((event) => (
+            <TimelineEventCard key={event.id} event={event} />
+          ))}
         </div>
-        ) : (
+      ) : (
         <p>No timeline events available.</p>
-        )}
-        </section>
-);
+      )}
+    </section>
+  );
 }

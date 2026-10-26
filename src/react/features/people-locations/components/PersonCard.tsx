@@ -1,5 +1,5 @@
-import { debugLog } from "../../../shared/debug.js";
-import type { Person } from "../../../types.js";
+import { debugLog } from "../../../../shared/debug.js";
+import type { Person } from "../../../../types.js";
 
 type PersonCardProps = Readonly<{
   person: Person;

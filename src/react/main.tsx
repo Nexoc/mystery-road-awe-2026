@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { debugLog } from "../shared/debug.js";
 import { loadInvestigationData } from "./data.js";
 
-import { App } from "../app/App.js";
+import { App } from "./app/App.js";
 
 const container = document.getElementById("react-root");
 
