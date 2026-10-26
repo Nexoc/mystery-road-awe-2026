@@ -50,6 +50,16 @@ export function PersonDetailsPage({ people }: PersonDetailsPageProps) {
     <ContentPanel title={`Person details: ${person.name}`}>
       <div className="person-details-actions">
         <Link to="/team/people">&larr; Back to people</Link>
+        <Link
+          to={`/timeline?person=${encodeURIComponent(person.id)}`}
+          onClick={() => {
+            debugLog("4.10", "PERSON DETAILS → Timeline query link selected", {
+              personId: person.id,
+            });
+          }}
+        >
+          View on timeline &rarr;
+        </Link>
       </div>
 
       <article className="person-card person-details-card">

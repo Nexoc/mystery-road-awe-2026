@@ -77,7 +77,13 @@ export function AppRoutes({ data }: AppRoutesProps) {
 
       <Route
         path="/timeline"
-        element={<TimelinePage events={data.timeline} />}
+        element={
+          <TimelinePage
+            events={data.timeline}
+            people={data.people}
+            locations={data.locations}
+          />
+        }
       />
 
       <Route

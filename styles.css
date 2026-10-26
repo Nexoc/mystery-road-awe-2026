@@ -682,6 +682,10 @@ a:focus-visible {
 }
 
 .person-details-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-bottom: 16px;
 }
 
@@ -710,6 +714,33 @@ a:focus-visible {
 }
 
 /* Timeline */
+.timeline-filter-hint {
+  margin: 0;
+}
+
+.timeline-filter-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-panel);
+}
+
+.timeline-filter-message a {
+  color: var(--color-accent-dark);
+  font-weight: 700;
+}
+
+.timeline-filter-warning {
+  border-color: #f59e0b;
+  background: #fff7ed;
+  color: #92400e;
+}
+
 .timeline-container {
   position: relative;
   padding-left: 26px;
