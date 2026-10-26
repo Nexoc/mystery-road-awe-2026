@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
+import { PeopleLocationsPage } from "../features/people-locations/PeopleLocationsPage.js";
 import { debugLog } from "../shared/debug.js";
 import type { InvestigationData, ViewName } from "../types.js";
 
@@ -225,6 +226,11 @@ export function App({ data }: AppProps) {
       <main className="app-main">
         {currentView === "dashboard" ? (
           <DashboardPage data={data} />
+        ) : currentView === "people" ? (
+          <PeopleLocationsPage
+            people={data.people}
+            locations={data.locations}
+          />
         ) : (
           <ViewPage currentView={currentView} />
         )}
