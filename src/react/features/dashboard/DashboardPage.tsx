@@ -7,6 +7,8 @@ import type {
   TimelineEvent,
 } from "../../../types.js";
 
+import { Badge, type BadgeTone } from "../../shared/components/Badge.js";
+
 type DashboardPageProps = Readonly<{
   data: InvestigationData;
 }>;
@@ -47,13 +49,15 @@ type PanelProps = Readonly<{
   children: ReactNode;
 }>;
 
-function getStatusBadgeClass(status: string): string {
+function getStatusBadgeTone(status: string): BadgeTone {
   const normalizedStatus = status.toLowerCase();
 
-  if (normalizedStatus === "reviewed") return "badge-reviewed";
-  if (normalizedStatus === "flagged") return "badge-flagged";
+  if (normalizedStatus === "reviewed") return "success";
+  if (normalizedStatus === "flagged") return "warning";
+  if (normalizedStatus === "open") return "warning";
+  if (normalizedStatus === "critical") return "critical";
 
-  return "badge-unreviewed";
+  return "neutral";
 }
 
 function formatDate(timestamp: string): string {
@@ -81,9 +85,9 @@ function CaseSummary({ caseData }: CaseSummaryProps) {
     <div className="case-summary-card">
       <h3>{caseData.title}</h3>
       <p>
-        <span className="badge badge-flagged">
+        <Badge tone={getStatusBadgeTone(caseData.status)}>
           {caseData.status.toUpperCase()}
-        </span>
+        </Badge>
       </p>
       <p>{caseData.summary}</p>
     </div>
@@ -170,9 +174,7 @@ function RecentEvidence({ evidence }: RecentEvidenceProps) {
       {evidence.map((item) => (
         <div className="mini-list-item" key={item.id}>
           <strong>{item.id}</strong> &mdash; {item.title}{" "}
-          <span className={`badge ${getStatusBadgeClass(item.status)}`}>
-            {item.status}
-          </span>
+          <Badge tone={getStatusBadgeTone(item.status)}>{item.status}</Badge>
         </div>
       ))}
     </>

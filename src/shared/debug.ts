@@ -13,7 +13,7 @@ type DebugScope = DemoId | readonly DemoId[];
  * ["3.9", "3.10"]     — несколько Demo
  * ["all"]             — все логи
  */
-const ACTIVE_DEBUG_DEMOS: readonly DebugFilter[] = ["4.5"];
+const ACTIVE_DEBUG_DEMOS: readonly DebugFilter[] = ["4.7"];
 
 function normalizeScopes(scope: DebugScope): readonly DemoId[] {
   return typeof scope === "string" ? [scope] : scope;
