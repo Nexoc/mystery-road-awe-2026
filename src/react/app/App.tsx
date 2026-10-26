@@ -15,6 +15,7 @@ const navigationItems: readonly NavigationItem[] = [
   { to: "/team", label: "People & Locations", end: false },
   { to: "/timeline", label: "Timeline", end: true },
   { to: "/workspace", label: "Workspace", end: true },
+  { to: "/key-demo", label: "Key Demo 4.4", end: true },
 ];
 
 function Navigation() {

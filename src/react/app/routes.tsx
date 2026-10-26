@@ -2,6 +2,7 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import { debugLog } from "../../shared/debug.js";
 import type { InvestigationData } from "../../types.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
+import { KeyIdentityDemo } from "../features/key-identity/KeyIdentityDemo.js";
 import { PeopleLocationsLayout } from "../features/people-locations/PeopleLocationsLayout.js";
 import { LocationsSection } from "../features/people-locations/components/LocationsSection.js";
 import { PeopleSection } from "../features/people-locations/components/PeopleSection.js";
@@ -82,6 +83,8 @@ export function AppRoutes({ data }: AppRoutesProps) {
           />
         }
       />
+
+      <Route path="/key-demo" element={<KeyIdentityDemo />} />
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
