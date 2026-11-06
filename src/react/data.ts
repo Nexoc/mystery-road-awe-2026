@@ -1,4 +1,5 @@
 import { debugLog } from "../shared/debug.js";
+import { readBookmarkIds } from "../shared/persistence.js";
 import type {
   CaseData,
   Evidence,
@@ -7,8 +8,6 @@ import type {
   Person,
   TimelineEvent,
 } from "../types.js";
-
-const BOOKMARKS_STORAGE_KEY = "remotion_bookmarks";
 
 type Validator<T> = (value: unknown) => value is T;
 
@@ -152,28 +151,6 @@ async function loadJson<T>(
   return value;
 }
 
-function loadBookmarkIds(): string[] {
-  try {
-    const rawValue = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
-    const parsedValue: unknown = rawValue ? JSON.parse(rawValue) : [];
-    const bookmarkIds = Array.isArray(parsedValue)
-      ? parsedValue.filter((item): item is string => typeof item === "string")
-      : [];
-
-    debugLog("3.10", "STORAGE → bookmarks read", {
-      bookmarkCount: bookmarkIds.length,
-    });
-
-    return bookmarkIds;
-  } catch (error: unknown) {
-    debugLog("3.10", "STORAGE → invalid bookmarks ignored", {
-      reason: error instanceof Error ? error.message : String(error),
-    });
-
-    return [];
-  }
-}
-
 export async function loadInvestigationData(): Promise<InvestigationData> {
   debugLog("3.10", "DATA → dashboard data loading started");
 
@@ -185,7 +162,8 @@ export async function loadInvestigationData(): Promise<InvestigationData> {
     loadJson("timeline.json", isTimelineEventArray),
   ]);
 
-  const bookmarkIds = loadBookmarkIds();
+  const evidenceIds = new Set(evidence.map((item) => item.id));
+  const bookmarkIds = readBookmarkIds().filter((id) => evidenceIds.has(id));
   const data: InvestigationData = {
     caseData,
     evidence,

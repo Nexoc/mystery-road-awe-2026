@@ -11,6 +11,7 @@ import { Badge, type BadgeTone } from "../../shared/components/Badge.js";
 
 type DashboardPageProps = Readonly<{
   data: InvestigationData;
+  bookmarkIds: readonly string[];
 }>;
 
 type CaseSummaryProps = Readonly<{
@@ -199,7 +200,7 @@ function RecentTimeline({ timeline }: RecentTimelineProps) {
   );
 }
 
-export function DashboardPage({ data }: DashboardPageProps) {
+export function DashboardPage({ data, bookmarkIds }: DashboardPageProps) {
   const reviewedCount = data.evidence.filter(
     (item) => item.status.toLowerCase() === "reviewed",
   ).length;
@@ -214,7 +215,7 @@ export function DashboardPage({ data }: DashboardPageProps) {
     evidenceCount: data.evidence.length,
     peopleCount: data.people.length,
     locationCount: data.locations.length,
-    bookmarkCount: data.bookmarkIds.length,
+    bookmarkCount: bookmarkIds.length,
     reviewedCount,
     reviewPercentage,
     recentEvidenceIds: recentEvidence.map((item) => item.id),
@@ -231,7 +232,7 @@ export function DashboardPage({ data }: DashboardPageProps) {
         evidenceCount={data.evidence.length}
         peopleCount={data.people.length}
         locationCount={data.locations.length}
-        bookmarkCount={data.bookmarkIds.length}
+        bookmarkCount={bookmarkIds.length}
         reviewedCount={reviewedCount}
       />
 

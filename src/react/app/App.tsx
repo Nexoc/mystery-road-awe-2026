@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { debugLog } from "../../shared/debug.js";
+import { writeBookmarkIds } from "../../shared/persistence.js";
 import type { InvestigationData } from "../../types.js";
+import { normalizeBookmarkIds, toggleBookmarkId } from "../state/bookmarks.js";
 import { AppRoutes } from "./routes.js";
 
 type NavigationItem = Readonly<{
@@ -87,8 +90,25 @@ type AppProps = Readonly<{
 }>;
 
 export function App({ data }: AppProps) {
+  const [bookmarkIds, setBookmarkIds] = useState<string[]>(() =>
+    normalizeBookmarkIds(data.bookmarkIds, data.evidence),
+  );
+  const [bookmarkStorageError, setBookmarkStorageError] = useState<
+    string | null
+  >(null);
+
+  const handleToggleBookmark = (evidenceId: string) => {
+    const nextBookmarkIds = toggleBookmarkId(bookmarkIds, evidenceId);
+
+    setBookmarkIds(nextBookmarkIds);
+
+    const result = writeBookmarkIds(nextBookmarkIds);
+    setBookmarkStorageError(result.ok ? null : result.message);
+  };
+
   debugLog("4.8", "APP → router-controlled shell rendered", {
     caseId: data.caseData.caseId,
+    bookmarkCount: bookmarkIds.length,
   });
 
   return (
@@ -96,7 +116,17 @@ export function App({ data }: AppProps) {
       <Header />
 
       <main className="app-main">
-        <AppRoutes data={data} />
+        {bookmarkStorageError && (
+          <div className="timeline-filter-warning" role="alert">
+            {bookmarkStorageError}
+          </div>
+        )}
+
+        <AppRoutes
+          data={data}
+          bookmarkIds={bookmarkIds}
+          onToggleBookmark={handleToggleBookmark}
+        />
       </main>
 
       <Footer />

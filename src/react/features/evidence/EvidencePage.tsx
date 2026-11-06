@@ -1,16 +1,22 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Evidence, Location, Person } from "../../../types.js";
-import { toggleBookmarkId } from "./bookmarkState.js";
 import { EvidenceCard } from "./components/EvidenceCard.js";
 import { EvidenceDetail } from "./components/EvidenceDetail.js";
 import { EvidenceToolbar } from "./components/EvidenceToolbar.js";
+import {
+  getVisibleEvidence,
+  initialEvidenceFilters,
+  type EvidenceFilterName,
+  type EvidenceFilters,
+} from "./evidenceFilters.js";
 
 type EvidencePageProps = Readonly<{
   evidence: readonly Evidence[];
   people: readonly Person[];
   locations: readonly Location[];
-  initialBookmarkIds: readonly string[];
+  bookmarkIds: readonly string[];
+  onToggleBookmark: (evidenceId: string) => void;
 }>;
 
 type NotesByEvidenceId = Record<string, string>;
@@ -19,35 +25,29 @@ export function EvidencePage({
   evidence,
   people,
   locations,
-  initialBookmarkIds,
+  bookmarkIds,
+  onToggleBookmark,
 }: EvidencePageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const [bookmarkIds, setBookmarkIds] = useState<string[]>([
-    ...initialBookmarkIds,
-  ]);
   const [notes, setNotes] = useState<NotesByEvidenceId>({});
-  const [searchTerm, setSearchTerm] = useState("");
+  const [filters, setFilters] = useState<EvidenceFilters>(
+    initialEvidenceFilters,
+  );
 
-  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
-  const visibleEvidence = normalizedSearchTerm
-    ? evidence.filter((item) => {
-        const searchableText = [item.title, item.summary, ...item.tags]
-          .join(" ")
-          .toLowerCase();
-
-        return searchableText.includes(normalizedSearchTerm);
-      })
-    : evidence;
-
+  const visibleEvidence = getVisibleEvidence(evidence, people, filters);
   const selectedEvidenceId = searchParams.get("item");
-
   const selectedEvidence = selectedEvidenceId
     ? evidence.find((item) => item.id === selectedEvidenceId)
     : undefined;
 
-  const handleToggleBookmark = (evidenceId: string) => {
-    setBookmarkIds((currentIds) => toggleBookmarkId(currentIds, evidenceId));
+  const handleFilterChange = <Name extends EvidenceFilterName>(
+    name: Name,
+    value: EvidenceFilters[Name],
+  ) => {
+    setFilters((currentFilters) => ({
+      ...currentFilters,
+      [name]: value,
+    }));
   };
 
   const handleOpenEvidence = (evidenceId: string) => {
@@ -84,9 +84,14 @@ export function EvidencePage({
         evidence={evidence}
         people={people}
         locations={locations}
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onClearFilters={() => setFilters(initialEvidenceFilters)}
       />
+
+      <p className="hint-text">
+        Showing {visibleEvidence.length} of {evidence.length} evidence items.
+      </p>
 
       <div className="evidence-grid">
         {visibleEvidence.map((item) => (
@@ -95,12 +100,12 @@ export function EvidencePage({
             evidence={item}
             isBookmarked={bookmarkIds.includes(item.id)}
             onOpen={handleOpenEvidence}
-            onToggleBookmark={handleToggleBookmark}
+            onToggleBookmark={onToggleBookmark}
           />
         ))}
 
         {visibleEvidence.length === 0 && (
-          <p>No evidence matches the current search.</p>
+          <p>No evidence matches the current filters.</p>
         )}
       </div>
 

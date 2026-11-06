@@ -45,7 +45,7 @@ Bookmark toggle использует то же правило: старое зн
 
 ## Как показать Demo
 
-1. Поставить breakpoint перед `return nextIds` в `bookmarkState.ts`.
+1. Поставить breakpoint перед `return nextIds` в `src/react/state/bookmarks.ts`.
 2. Нажать bookmark в Evidence.
 3. Проверить `currentIds`, `nextIds` и выражение `Object.is(currentIds, nextIds)` — результат должен
    быть `false`.

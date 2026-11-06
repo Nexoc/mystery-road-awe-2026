@@ -13,6 +13,8 @@ import { WorkspacePage } from "../features/workspace/WorkspacePage.js";
 
 type AppRoutesProps = Readonly<{
   data: InvestigationData;
+  bookmarkIds: readonly string[];
+  onToggleBookmark: (evidenceId: string) => void;
 }>;
 
 function NotFoundPage() {
@@ -25,14 +27,21 @@ function NotFoundPage() {
   );
 }
 
-export function AppRoutes({ data }: AppRoutesProps) {
+export function AppRoutes({
+  data,
+  bookmarkIds,
+  onToggleBookmark,
+}: AppRoutesProps) {
   debugLog("4.8", "ROUTES → route table rendered");
 
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-      <Route path="/dashboard" element={<DashboardPage data={data} />} />
+      <Route
+        path="/dashboard"
+        element={<DashboardPage data={data} bookmarkIds={bookmarkIds} />}
+      />
 
       <Route
         path="/evidence"
@@ -41,7 +50,8 @@ export function AppRoutes({ data }: AppRoutesProps) {
             evidence={data.evidence}
             people={data.people}
             locations={data.locations}
-            initialBookmarkIds={data.bookmarkIds}
+            bookmarkIds={bookmarkIds}
+            onToggleBookmark={onToggleBookmark}
           />
         }
       />
@@ -79,7 +89,7 @@ export function AppRoutes({ data }: AppRoutesProps) {
           <WorkspacePage
             evidence={data.evidence}
             people={data.people}
-            bookmarkIds={data.bookmarkIds}
+            bookmarkIds={bookmarkIds}
           />
         }
       />

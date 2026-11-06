@@ -1,3 +1,4 @@
+const BOOKMARKS_STORAGE_KEY = "remotion_bookmarks";
 const HYPOTHESIS_STORAGE_KEY = "remotion_hypothesis";
 
 export type HypothesisDraft = {
@@ -13,6 +14,9 @@ export type HypothesisSaveResult =
   | Readonly<{ ok: true; savedAt: string }>
   | Readonly<{ ok: false; message: string }>;
 
+export type PersistenceWriteResult =
+  Readonly<{ ok: true }> | Readonly<{ ok: false; message: string }>;
+
 export function createEmptyHypothesisDraft(): HypothesisDraft {
   return {
     suspectId: "",
@@ -26,6 +30,44 @@ export function createEmptyHypothesisDraft(): HypothesisDraft {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+export function readBookmarkIds(): string[] {
+  try {
+    const rawValue = localStorage.getItem(BOOKMARKS_STORAGE_KEY);
+    const parsedValue: unknown = rawValue ? JSON.parse(rawValue) : [];
+
+    if (!Array.isArray(parsedValue)) return [];
+
+    return [
+      ...new Set(
+        parsedValue.filter((item): item is string => typeof item === "string"),
+      ),
+    ];
+  } catch (error: unknown) {
+    console.warn("Could not read stored bookmarks.", error);
+    return [];
+  }
+}
+
+export function writeBookmarkIds(
+  bookmarkIds: readonly string[],
+): PersistenceWriteResult {
+  try {
+    localStorage.setItem(
+      BOOKMARKS_STORAGE_KEY,
+      JSON.stringify([...new Set(bookmarkIds)]),
+    );
+
+    return { ok: true };
+  } catch (error: unknown) {
+    const reason = error instanceof Error ? error.message : "Unknown error";
+
+    return {
+      ok: false,
+      message: `Bookmarks changed for this session but could not be saved: ${reason}`,
+    };
+  }
 }
 
 function isHypothesisDraft(value: unknown): value is HypothesisDraft {
