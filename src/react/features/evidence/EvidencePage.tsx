@@ -12,6 +12,7 @@ import {
   type EvidenceFilters,
 } from "./evidenceFilters.js";
 
+// Receive shared notes state and callbacks from parent components
 type EvidencePageProps = Readonly<{
   evidence: readonly Evidence[];
   people: readonly Person[];
@@ -22,6 +23,7 @@ type EvidencePageProps = Readonly<{
   onSaveNote: (evidenceId: string, text: string) => void;
 }>;
 
+// Get shared state and callbacks from App through props
 export function EvidencePage({
   evidence,
   people,
@@ -105,11 +107,16 @@ export function EvidencePage({
       </div>
 
       {selectedEvidence && (
+        // Pass the saved note and save callback down to EvidenceDetail
         <EvidenceDetail
           key={selectedEvidence.id}
           evidence={selectedEvidence}
+
+          // Read the saved note for the currently selected evidence
           savedNote={notes[selectedEvidence.id] ?? ""}
           onClose={handleCloseEvidence}
+
+          // Forward the save callback to EvidenceDetail
           onSaveNote={onSaveNote}
         />
       )}

@@ -4,6 +4,7 @@ import { BookmarksList } from "./components/BookmarksList.js";
 import { HypothesisForm } from "./components/HypothesisForm.js";
 import { NotesList } from "./components/NotesList.js";
 
+// Receive shared notes state from parent
 type WorkspacePageProps = Readonly<{
   evidence: readonly Evidence[];
   people: readonly Person[];
@@ -11,6 +12,7 @@ type WorkspacePageProps = Readonly<{
   notes: Readonly<NotesByEvidenceId>;
 }>;
 
+// Get current shared notes from App through props
 export function WorkspacePage({
   evidence,
   people,
@@ -29,6 +31,7 @@ export function WorkspacePage({
           </div>
         </div>
 
+        // Pass current notes to NotesList for display
         <div className="workspace-col">
           <h3>Personal Notes</h3>
           <p className="hint-text">

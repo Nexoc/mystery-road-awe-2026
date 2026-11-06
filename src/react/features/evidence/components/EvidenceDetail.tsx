@@ -1,8 +1,9 @@
-import { useState } from "react";
 import type { FormEvent } from "react";
+import { useState } from "react";
 import { debugLog } from "../../../../shared/debug.js";
 import type { Evidence } from "../../../../types.js";
 
+// Receive selected evidence, saved note and save callback from parent
 type EvidenceDetailProps = Readonly<{
   evidence: Evidence;
   savedNote: string;
@@ -16,8 +17,11 @@ export function EvidenceDetail({
   onClose,
   onSaveNote,
 }: EvidenceDetailProps) {
+
+  // Local draft state for editing before save
   const [draftNote, setDraftNote] = useState(savedNote);
 
+  // Request the parent to save the current draft
   const handleNoteSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -26,6 +30,7 @@ export function EvidenceDetail({
       noteLength: draftNote.length,
     });
 
+    // Child requests a state change via the callback
     onSaveNote(evidence.id, draftNote);
   };
 
@@ -75,6 +80,7 @@ export function EvidenceDetail({
         ))}
       </div>
 
+      // Controlled textarea updates only the local draft
       <form className="detail-field" onSubmit={handleNoteSubmit}>
         <label htmlFor={`evidence-note-${evidence.id}`}>
           <strong>Investigator note</strong>
@@ -90,6 +96,7 @@ export function EvidenceDetail({
           placeholder="Add a private note about this evidence..."
         />
 
+        // Submit the draft and trigger the callback chain
         <button
           type="submit"
           className="btn btn-primary btn-small"
@@ -99,6 +106,7 @@ export function EvidenceDetail({
         </button>
       </form>
 
+        // Display the saved shared state received from App
       <div className="detail-field" aria-live="polite">
         <strong>Saved note preview</strong>
         <div>{savedNote || "No saved note yet."}</div>

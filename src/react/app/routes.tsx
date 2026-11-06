@@ -12,6 +12,7 @@ import { PeopleSection } from "../features/people-locations/components/PeopleSec
 import { TimelinePage } from "../features/timeline/TimelinePage.js";
 import { WorkspacePage } from "../features/workspace/WorkspacePage.js";
 
+// Props received from App, including shared state and callbacks
 type AppRoutesProps = Readonly<{
   data: InvestigationData;
   bookmarkIds: readonly string[];
@@ -30,6 +31,7 @@ function NotFoundPage() {
   );
 }
 
+// Receive shared notes state and callbacks from App
 export function AppRoutes({
   data,
   bookmarkIds,
@@ -51,6 +53,7 @@ export function AppRoutes({
       <Route
         path="/evidence"
         element={
+          // Forward notes state and save callback to EvidencePage
           <EvidencePage
             evidence={data.evidence}
             people={data.people}
@@ -93,6 +96,7 @@ export function AppRoutes({
       <Route
         path="/workspace"
         element={
+          // Pass current notes to Workspace for display
           <WorkspacePage
             evidence={data.evidence}
             people={data.people}
