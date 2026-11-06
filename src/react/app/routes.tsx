@@ -2,33 +2,18 @@ import { Link, Navigate, Route, Routes } from "react-router-dom";
 import { debugLog } from "../../shared/debug.js";
 import type { InvestigationData } from "../../types.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
+import { EvidencePage } from "../features/evidence/EvidencePage.js";
 import { KeyIdentityDemo } from "../features/key-identity/KeyIdentityDemo.js";
 import { PeopleLocationsLayout } from "../features/people-locations/PeopleLocationsLayout.js";
 import { PersonDetailsPage } from "../features/people-locations/PersonDetailsPage.js";
 import { LocationsSection } from "../features/people-locations/components/LocationsSection.js";
 import { PeopleSection } from "../features/people-locations/components/PeopleSection.js";
 import { TimelinePage } from "../features/timeline/TimelinePage.js";
+import { WorkspacePage } from "../features/workspace/WorkspacePage.js";
 
 type AppRoutesProps = Readonly<{
   data: InvestigationData;
 }>;
-
-type PlaceholderPageProps = Readonly<{
-  title: string;
-  description: string;
-}>;
-
-function PlaceholderPage({ title, description }: PlaceholderPageProps) {
-  return (
-    <section>
-      <h2>{title}</h2>
-
-      <div className="intro-card">
-        <p>{description}</p>
-      </div>
-    </section>
-  );
-}
 
 function NotFoundPage() {
   return (
@@ -52,9 +37,11 @@ export function AppRoutes({ data }: AppRoutesProps) {
       <Route
         path="/evidence"
         element={
-          <PlaceholderPage
-            title="Evidence Catalogue"
-            description="The Evidence view will be migrated in Exercise 5."
+          <EvidencePage
+            evidence={data.evidence}
+            people={data.people}
+            locations={data.locations}
+            initialBookmarkIds={data.bookmarkIds}
           />
         }
       />
@@ -89,9 +76,10 @@ export function AppRoutes({ data }: AppRoutesProps) {
       <Route
         path="/workspace"
         element={
-          <PlaceholderPage
-            title="Investigator Workspace"
-            description="The Workspace view will be migrated in Exercise 5."
+          <WorkspacePage
+            evidence={data.evidence}
+            people={data.people}
+            bookmarkIds={data.bookmarkIds}
           />
         }
       />
