@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Evidence } from "../../../../types.js";
 
@@ -14,15 +15,11 @@ export function EvidenceDetail({
   onClose,
   onSaveNote,
 }: EvidenceDetailProps) {
+  const [draftNote, setDraftNote] = useState(savedNote);
+
   const handleNoteSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-    const note = formData.get("note");
-
-    if (typeof note === "string") {
-      onSaveNote(evidence.id, note);
-    }
+    onSaveNote(evidence.id, draftNote);
   };
 
   return (
@@ -81,7 +78,8 @@ export function EvidenceDetail({
           name="note"
           className="note-textarea"
           rows={3}
-          defaultValue={savedNote}
+          value={draftNote}
+          onChange={(event) => setDraftNote(event.currentTarget.value)}
           placeholder="Add a private note about this evidence..."
         />
 
@@ -95,7 +93,7 @@ export function EvidenceDetail({
       </form>
 
       <div className="detail-field" aria-live="polite">
-        <strong>Note preview</strong>
+        <strong>Saved note preview</strong>
         <div>{savedNote || "No saved note yet."}</div>
       </div>
     </section>

@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { debugLog } from "../../shared/debug.js";
-import { writeBookmarkIds } from "../../shared/persistence.js";
+import {
+  readNotes,
+  writeBookmarkIds,
+  writeNotes,
+  type NotesByEvidenceId,
+} from "../../shared/persistence.js";
 import type { InvestigationData } from "../../types.js";
 import { normalizeBookmarkIds, toggleBookmarkId } from "../state/bookmarks.js";
 import { AppRoutes } from "./routes.js";
@@ -96,6 +101,10 @@ export function App({ data }: AppProps) {
   const [bookmarkStorageError, setBookmarkStorageError] = useState<
     string | null
   >(null);
+  const [notes, setNotes] = useState<NotesByEvidenceId>(() => readNotes());
+  const [notesStorageError, setNotesStorageError] = useState<string | null>(
+    null,
+  );
 
   const handleToggleBookmark = (evidenceId: string) => {
     const nextBookmarkIds = toggleBookmarkId(bookmarkIds, evidenceId);
@@ -106,9 +115,19 @@ export function App({ data }: AppProps) {
     setBookmarkStorageError(result.ok ? null : result.message);
   };
 
+  const handleSaveNote = (evidenceId: string, text: string) => {
+    const nextNotes = { ...notes, [evidenceId]: text };
+
+    setNotes(nextNotes);
+
+    const result = writeNotes(nextNotes);
+    setNotesStorageError(result.ok ? null : result.message);
+  };
+
   debugLog("4.8", "APP → router-controlled shell rendered", {
     caseId: data.caseData.caseId,
     bookmarkCount: bookmarkIds.length,
+    noteCount: Object.values(notes).filter((text) => text.trim()).length,
   });
 
   return (
@@ -122,10 +141,18 @@ export function App({ data }: AppProps) {
           </div>
         )}
 
+        {notesStorageError && (
+          <div className="timeline-filter-warning" role="alert">
+            {notesStorageError}
+          </div>
+        )}
+
         <AppRoutes
           data={data}
           bookmarkIds={bookmarkIds}
           onToggleBookmark={handleToggleBookmark}
+          notes={notes}
+          onSaveNote={handleSaveNote}
         />
       </main>
 

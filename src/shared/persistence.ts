@@ -1,5 +1,6 @@
 const BOOKMARKS_STORAGE_KEY = "remotion_bookmarks";
 const HYPOTHESIS_STORAGE_KEY = "remotion_hypothesis";
+const NOTES_STORAGE_KEY = "remotion_notes";
 
 export type HypothesisDraft = {
   suspectId: string;
@@ -9,6 +10,8 @@ export type HypothesisDraft = {
   explanation: string;
   alternative: string;
 };
+
+export type NotesByEvidenceId = Record<string, string>;
 
 export type HypothesisSaveResult =
   | Readonly<{ ok: true; savedAt: string }>
@@ -50,6 +53,27 @@ export function readBookmarkIds(): string[] {
   }
 }
 
+export function readNotes(): NotesByEvidenceId {
+  try {
+    const rawValue = localStorage.getItem(NOTES_STORAGE_KEY);
+
+    if (!rawValue) return {};
+
+    const parsedValue: unknown = JSON.parse(rawValue);
+
+    if (!isRecord(parsedValue)) return {};
+
+    return Object.fromEntries(
+      Object.entries(parsedValue).filter(
+        (entry): entry is [string, string] => typeof entry[1] === "string",
+      ),
+    );
+  } catch (error: unknown) {
+    console.warn("Could not read stored notes.", error);
+    return {};
+  }
+}
+
 export function writeBookmarkIds(
   bookmarkIds: readonly string[],
 ): PersistenceWriteResult {
@@ -66,6 +90,23 @@ export function writeBookmarkIds(
     return {
       ok: false,
       message: `Bookmarks changed for this session but could not be saved: ${reason}`,
+    };
+  }
+}
+
+export function writeNotes(
+  notes: Readonly<NotesByEvidenceId>,
+): PersistenceWriteResult {
+  try {
+    localStorage.setItem(NOTES_STORAGE_KEY, JSON.stringify(notes));
+
+    return { ok: true };
+  } catch (error: unknown) {
+    const reason = error instanceof Error ? error.message : "Unknown error";
+
+    return {
+      ok: false,
+      message: `Notes changed for this session but could not be saved: ${reason}`,
     };
   }
 }

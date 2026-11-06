@@ -1,3 +1,4 @@
+import type { NotesByEvidenceId } from "../../../shared/persistence.js";
 import type { Evidence, Person } from "../../../types.js";
 import { BookmarksList } from "./components/BookmarksList.js";
 import { HypothesisForm } from "./components/HypothesisForm.js";
@@ -7,12 +8,14 @@ type WorkspacePageProps = Readonly<{
   evidence: readonly Evidence[];
   people: readonly Person[];
   bookmarkIds: readonly string[];
+  notes: Readonly<NotesByEvidenceId>;
 }>;
 
 export function WorkspacePage({
   evidence,
   people,
   bookmarkIds,
+  notes,
 }: WorkspacePageProps) {
   return (
     <section>
@@ -32,7 +35,7 @@ export function WorkspacePage({
             Notes are attached to the selected item in the Evidence view.
           </p>
           <div className="notes-list">
-            <NotesList />
+            <NotesList evidence={evidence} notes={notes} />
           </div>
         </div>
       </div>

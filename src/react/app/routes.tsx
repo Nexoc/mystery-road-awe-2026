@@ -1,5 +1,6 @@
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 import { debugLog } from "../../shared/debug.js";
+import type { NotesByEvidenceId } from "../../shared/persistence.js";
 import type { InvestigationData } from "../../types.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
 import { EvidencePage } from "../features/evidence/EvidencePage.js";
@@ -15,6 +16,8 @@ type AppRoutesProps = Readonly<{
   data: InvestigationData;
   bookmarkIds: readonly string[];
   onToggleBookmark: (evidenceId: string) => void;
+  notes: Readonly<NotesByEvidenceId>;
+  onSaveNote: (evidenceId: string, text: string) => void;
 }>;
 
 function NotFoundPage() {
@@ -31,6 +34,8 @@ export function AppRoutes({
   data,
   bookmarkIds,
   onToggleBookmark,
+  notes,
+  onSaveNote,
 }: AppRoutesProps) {
   debugLog("4.8", "ROUTES → route table rendered");
 
@@ -52,6 +57,8 @@ export function AppRoutes({
             locations={data.locations}
             bookmarkIds={bookmarkIds}
             onToggleBookmark={onToggleBookmark}
+            notes={notes}
+            onSaveNote={onSaveNote}
           />
         }
       />
@@ -90,6 +97,7 @@ export function AppRoutes({
             evidence={data.evidence}
             people={data.people}
             bookmarkIds={bookmarkIds}
+            notes={notes}
           />
         }
       />

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import type { NotesByEvidenceId } from "../../../shared/persistence.js";
 import type { Evidence, Location, Person } from "../../../types.js";
 import { EvidenceCard } from "./components/EvidenceCard.js";
 import { EvidenceDetail } from "./components/EvidenceDetail.js";
@@ -17,9 +18,9 @@ type EvidencePageProps = Readonly<{
   locations: readonly Location[];
   bookmarkIds: readonly string[];
   onToggleBookmark: (evidenceId: string) => void;
+  notes: Readonly<NotesByEvidenceId>;
+  onSaveNote: (evidenceId: string, text: string) => void;
 }>;
-
-type NotesByEvidenceId = Record<string, string>;
 
 export function EvidencePage({
   evidence,
@@ -27,9 +28,10 @@ export function EvidencePage({
   locations,
   bookmarkIds,
   onToggleBookmark,
+  notes,
+  onSaveNote,
 }: EvidencePageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [notes, setNotes] = useState<NotesByEvidenceId>({});
   const [filters, setFilters] = useState<EvidenceFilters>(
     initialEvidenceFilters,
   );
@@ -62,13 +64,6 @@ export function EvidencePage({
 
     nextSearchParams.delete("item");
     setSearchParams(nextSearchParams, { replace: true });
-  };
-
-  const handleSaveNote = (evidenceId: string, text: string) => {
-    setNotes((currentNotes) => ({
-      ...currentNotes,
-      [evidenceId]: text,
-    }));
   };
 
   return (
@@ -115,7 +110,7 @@ export function EvidencePage({
           evidence={selectedEvidence}
           savedNote={notes[selectedEvidence.id] ?? ""}
           onClose={handleCloseEvidence}
-          onSaveNote={handleSaveNote}
+          onSaveNote={onSaveNote}
         />
       )}
     </section>
