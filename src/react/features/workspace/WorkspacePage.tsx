@@ -4,7 +4,7 @@ import { BookmarksList } from "./components/BookmarksList.js";
 import { HypothesisForm } from "./components/HypothesisForm.js";
 import { NotesList } from "./components/NotesList.js";
 
-// Receive shared notes state from parent
+// WorkspacePage erhält den gemeinsamen Notes-State von der übergeordneten Komponente
 type WorkspacePageProps = Readonly<{
   evidence: readonly Evidence[];
   people: readonly Person[];
@@ -12,7 +12,7 @@ type WorkspacePageProps = Readonly<{
   notes: Readonly<NotesByEvidenceId>;
 }>;
 
-// Get current shared notes from App through props
+// Der aktuelle Notes-State wird über Props bis zu WorkspacePage weitergegeben
 export function WorkspacePage({
   evidence,
   people,
@@ -31,12 +31,14 @@ export function WorkspacePage({
           </div>
         </div>
 
-        // Pass current notes to NotesList for display
+        {/* Der aktuelle Notes-State wird an NotesList weitergegeben.
+            WorkspacePage verändert die Notes nicht, sondern reicht sie nur zur Anzeige weiter. */}
         <div className="workspace-col">
           <h3>Personal Notes</h3>
           <p className="hint-text">
             Notes are attached to the selected item in the Evidence view.
           </p>
+
           <div className="notes-list">
             <NotesList evidence={evidence} notes={notes} />
           </div>

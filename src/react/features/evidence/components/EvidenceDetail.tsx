@@ -3,7 +3,7 @@ import { useState } from "react";
 import { debugLog } from "../../../../shared/debug.js";
 import type { Evidence } from "../../../../types.js";
 
-// Receive selected evidence, saved note and save callback from parent
+// EvidenceDetail erhält das ausgewählte Evidence, die gespeicherte Note und den Save-Callback vom Parent
 type EvidenceDetailProps = Readonly<{
   evidence: Evidence;
   savedNote: string;
@@ -17,11 +17,10 @@ export function EvidenceDetail({
   onClose,
   onSaveNote,
 }: EvidenceDetailProps) {
-
-  // Local draft state for editing before save
+  // Lokaler Draft-State: Änderungen beim Tippen werden zunächst nur hier gespeichert
   const [draftNote, setDraftNote] = useState(savedNote);
 
-  // Request the parent to save the current draft
+  // Beim Absenden wird der Parent über den Callback aufgefordert, den aktuellen Draft zu speichern
   const handleNoteSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -30,7 +29,7 @@ export function EvidenceDetail({
       noteLength: draftNote.length,
     });
 
-    // Child requests a state change via the callback
+    // Das Child verändert den Parent-State nicht direkt, sondern fordert die Änderung über den Callback an
     onSaveNote(evidence.id, draftNote);
   };
 
@@ -80,7 +79,8 @@ export function EvidenceDetail({
         ))}
       </div>
 
-      // Controlled textarea updates only the local draft
+      {/* Controlled Input: Beim Tippen wird nur der lokale draftNote-State geändert.
+          Der gemeinsame Notes-State in App bleibt zunächst unverändert. */}
       <form className="detail-field" onSubmit={handleNoteSubmit}>
         <label htmlFor={`evidence-note-${evidence.id}`}>
           <strong>Investigator note</strong>
@@ -96,7 +96,7 @@ export function EvidenceDetail({
           placeholder="Add a private note about this evidence..."
         />
 
-        // Submit the draft and trigger the callback chain
+        {/* Beim Absenden wird handleNoteSubmit ausgeführt und damit die Callback-Kette gestartet */}
         <button
           type="submit"
           className="btn btn-primary btn-small"
@@ -106,7 +106,8 @@ export function EvidenceDetail({
         </button>
       </form>
 
-        // Display the saved shared state received from App
+      {/* Zeigt die gespeicherte Note aus dem gemeinsamen State in App.
+          Dieser Wert wird nach dem State-Update neu über Props geliefert. */}
       <div className="detail-field" aria-live="polite">
         <strong>Saved note preview</strong>
         <div>{savedNote || "No saved note yet."}</div>

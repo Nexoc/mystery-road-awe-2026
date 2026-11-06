@@ -102,7 +102,7 @@ export function App({ data }: AppProps) {
     string | null
   >(null);
 
-  // Shared notes state is owned by App
+  // App besitzt den gemeinsamen Notes-State, da dieser von mehreren Komponenten benötigt wird
   const [notes, setNotes] = useState<NotesByEvidenceId>(() => readNotes());
 
   const [notesStorageError, setNotesStorageError] = useState<string | null>(
@@ -127,17 +127,17 @@ export function App({ data }: AppProps) {
     setBookmarkStorageError(result.ok ? null : result.message);
   };
 
-  // Parent callback for saving a note
+  // Parent-Callback: Child-Komponenten können damit eine Änderung des gemeinsamen Notes-States anfordern
   const handleSaveNote = (evidenceId: string, text: string) => {
     debugLog("5.6", "App → handleSaveNote received", {
       evidenceId,
       noteLength: text.length,
     });
 
-    // Create a new notes object without mutating the old state
+    // Neues Notes-Objekt erzeugen, ohne den bestehenden State direkt zu verändern
     const nextNotes = { ...notes, [evidenceId]: text };
 
-    // Update React state and trigger a re-render
+    // React-State aktualisieren; dadurch wird ein neuer Render mit dem aktualisierten State ausgelöst
     setNotes(nextNotes);
 
     debugLog("5.6", "App → notes state update scheduled", {
@@ -145,7 +145,7 @@ export function App({ data }: AppProps) {
       noteCount: Object.values(nextNotes).filter((note) => note.trim()).length,
     });
 
-    // Persist the updated notes in localStorage
+    // Den aktualisierten Notes-State zusätzlich im localStorage speichern
     const result = writeNotes(nextNotes);
     setNotesStorageError(result.ok ? null : result.message);
   };
@@ -173,7 +173,8 @@ export function App({ data }: AppProps) {
           </div>
         )}
 
-        // Pass notes state and save callback down through props
+        {/* Der gemeinsame Notes-State und der Save-Callback werden über Props
+            an AppRoutes weitergegeben. App bleibt Besitzer des States. */}
         <AppRoutes
           data={data}
           bookmarkIds={bookmarkIds}
