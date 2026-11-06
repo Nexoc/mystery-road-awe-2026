@@ -117,8 +117,10 @@ export function EvidencePage({
         )}
       </div>
 
-      {/* Die gespeicherte Note und der Save-Callback werden an EvidenceDetail weitergegeben.
-          EvidencePage verändert den gemeinsamen Notes-State nicht selbst. */}
+      {/*
+      Die gespeicherte Note und der Save-Callback werden an EvidenceDetail weitergegeben.
+          EvidencePage verändert den gemeinsamen Notes-State nicht selbst.
+          */}
       {selectedEvidence && (
         <EvidenceDetail
           key={selectedEvidence.id}

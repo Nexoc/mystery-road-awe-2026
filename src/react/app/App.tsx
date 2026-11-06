@@ -27,8 +27,6 @@ import { AppRoutes } from "./routes.js";
 // 5. Notes im localStorage speichern
 // 6. notes + Callback über Props an AppRoutes weitergeben
 
-
-
 type NavigationItem = Readonly<{
   to: string;
   label: string;

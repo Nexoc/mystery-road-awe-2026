@@ -1,10 +1,10 @@
-import type { FormEvent } from "react";
+import type { SubmitEventHandler } from "react";
 import { useState } from "react";
 import { debugLog } from "../../../../shared/debug.js";
 import type { Evidence } from "../../../../types.js";
 
 {
-  /* EvidencePage gibt savedNote und onSaveNote nur weiter 
+  /* EvidencePage gibt savedNote und onSaveNote nur weiter
 
   1. savedNote + Callback von EvidencePage erhalten
   2. draftNote lokal mit useState bearbeiten
@@ -32,7 +32,7 @@ export function EvidenceDetail({
   const [draftNote, setDraftNote] = useState(savedNote);
 
   // Beim Absenden wird der Parent über den Callback aufgefordert, den aktuellen Draft zu speichern
-  const handleNoteSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleNoteSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     debugLog("5.6", "EvidenceDetail → save requested", {
