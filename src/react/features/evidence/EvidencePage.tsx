@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Evidence, Location, Person } from "../../../types.js";
+import { toggleBookmarkId } from "./bookmarkState.js";
 import { EvidenceCard } from "./components/EvidenceCard.js";
 import { EvidenceDetail } from "./components/EvidenceDetail.js";
 import { EvidenceToolbar } from "./components/EvidenceToolbar.js";
@@ -46,11 +47,7 @@ export function EvidencePage({
     : undefined;
 
   const handleToggleBookmark = (evidenceId: string) => {
-    setBookmarkIds((currentIds) =>
-      currentIds.includes(evidenceId)
-        ? currentIds.filter((id) => id !== evidenceId)
-        : [...currentIds, evidenceId],
-    );
+    setBookmarkIds((currentIds) => toggleBookmarkId(currentIds, evidenceId));
   };
 
   const handleOpenEvidence = (evidenceId: string) => {
