@@ -26,6 +26,18 @@ export function EvidencePage({
     ...initialBookmarkIds,
   ]);
   const [notes, setNotes] = useState<NotesByEvidenceId>({});
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+  const visibleEvidence = normalizedSearchTerm
+    ? evidence.filter((item) => {
+        const searchableText = [item.title, item.summary, ...item.tags]
+          .join(" ")
+          .toLowerCase();
+
+        return searchableText.includes(normalizedSearchTerm);
+      })
+    : evidence;
 
   const selectedEvidenceId = searchParams.get("item");
 
@@ -75,10 +87,12 @@ export function EvidencePage({
         evidence={evidence}
         people={people}
         locations={locations}
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
       />
 
       <div className="evidence-grid">
-        {evidence.map((item) => (
+        {visibleEvidence.map((item) => (
           <EvidenceCard
             key={item.id}
             evidence={item}
@@ -87,6 +101,10 @@ export function EvidencePage({
             onToggleBookmark={handleToggleBookmark}
           />
         ))}
+
+        {visibleEvidence.length === 0 && (
+          <p>No evidence matches the current search.</p>
+        )}
       </div>
 
       {selectedEvidence && (

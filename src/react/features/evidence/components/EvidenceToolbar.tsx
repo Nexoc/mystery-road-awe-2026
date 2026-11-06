@@ -4,12 +4,16 @@ type EvidenceToolbarProps = Readonly<{
   evidence: readonly Evidence[];
   people: readonly Person[];
   locations: readonly Location[];
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
 }>;
 
 export function EvidenceToolbar({
   evidence,
   people,
   locations,
+  searchTerm,
+  onSearchChange,
 }: EvidenceToolbarProps) {
   const evidenceTypes = [
     ...new Set(evidence.map((item) => item.type.toLowerCase())),
@@ -24,6 +28,8 @@ export function EvidenceToolbar({
         <input
           type="text"
           id="evidenceSearch"
+          value={searchTerm}
+          onChange={(event) => onSearchChange(event.currentTarget.value)}
           placeholder="Search evidence by title, summary, or tag…"
           autoComplete="off"
         />
