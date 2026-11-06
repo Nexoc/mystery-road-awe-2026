@@ -1,3 +1,4 @@
+import { debugLog } from "../../../../shared/debug.js";
 import type { NotesByEvidenceId } from "../../../../shared/persistence.js";
 import type { Evidence } from "../../../../types.js";
 
@@ -11,6 +12,10 @@ export function NotesList({ evidence, notes }: NotesListProps) {
     const text = notes[item.id];
 
     return text?.trim() ? [{ evidence: item, text }] : [];
+  });
+
+  debugLog("5.6", "NotesList → rendered with updated notes", {
+    noteCount: noteEntries.length,
   });
 
   if (noteEntries.length === 0) {

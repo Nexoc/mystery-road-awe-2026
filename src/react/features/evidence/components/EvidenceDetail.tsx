@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
+import { debugLog } from "../../../../shared/debug.js";
 import type { Evidence } from "../../../../types.js";
 
 type EvidenceDetailProps = Readonly<{
@@ -19,6 +20,12 @@ export function EvidenceDetail({
 
   const handleNoteSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    debugLog("5.6", "EvidenceDetail → save requested", {
+      evidenceId: evidence.id,
+      noteLength: draftNote.length,
+    });
+
     onSaveNote(evidence.id, draftNote);
   };
 

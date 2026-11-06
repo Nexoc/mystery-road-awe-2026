@@ -107,18 +107,37 @@ export function App({ data }: AppProps) {
   );
 
   const handleToggleBookmark = (evidenceId: string) => {
+    debugLog("5.6", "App → handleToggleBookmark received", {
+      evidenceId,
+    });
+
     const nextBookmarkIds = toggleBookmarkId(bookmarkIds, evidenceId);
 
     setBookmarkIds(nextBookmarkIds);
+
+    debugLog("5.6", "App → bookmark state update scheduled", {
+      evidenceId,
+      bookmarkCount: nextBookmarkIds.length,
+    });
 
     const result = writeBookmarkIds(nextBookmarkIds);
     setBookmarkStorageError(result.ok ? null : result.message);
   };
 
   const handleSaveNote = (evidenceId: string, text: string) => {
+    debugLog("5.6", "App → handleSaveNote received", {
+      evidenceId,
+      noteLength: text.length,
+    });
+
     const nextNotes = { ...notes, [evidenceId]: text };
 
     setNotes(nextNotes);
+
+    debugLog("5.6", "App → notes state update scheduled", {
+      evidenceId,
+      noteCount: Object.values(nextNotes).filter((note) => note.trim()).length,
+    });
 
     const result = writeNotes(nextNotes);
     setNotesStorageError(result.ok ? null : result.message);

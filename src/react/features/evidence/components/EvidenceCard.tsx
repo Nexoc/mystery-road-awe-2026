@@ -1,4 +1,5 @@
 import type { KeyboardEvent, MouseEvent } from "react";
+import { debugLog } from "../../../../shared/debug.js";
 import type { Evidence } from "../../../../types.js";
 
 type EvidenceCardProps = Readonly<{
@@ -25,6 +26,11 @@ export function EvidenceCard({
 
   const handleBookmarkClick = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+
+    debugLog("5.6", "EvidenceCard → bookmark toggle requested", {
+      evidenceId: evidence.id,
+    });
+
     onToggleBookmark(evidence.id);
   };
 
