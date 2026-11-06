@@ -12,6 +12,17 @@ import {
   type EvidenceFilters,
 } from "./evidenceFilters.js";
 
+// EvidencePage erhält notes + Callback
+// ↓
+// gibt beides an EvidenceDetail weiter
+
+
+// 1. notes + Callback von AppRoutes erhalten
+// 2. gespeicherte Note für das ausgewählte Evidence lesen
+// 3. savedNote + Callback an EvidenceDetail weitergeben
+// 4. EvidencePage verändert den State nicht selbst
+
+
 // Props enthalten den gemeinsamen Notes-State und die Callbacks der übergeordneten Komponenten
 type EvidencePageProps = Readonly<{
   evidence: readonly Evidence[];

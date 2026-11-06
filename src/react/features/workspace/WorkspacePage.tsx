@@ -4,6 +4,29 @@ import { BookmarksList } from "./components/BookmarksList.js";
 import { HypothesisForm } from "./components/HypothesisForm.js";
 import { NotesList } from "./components/NotesList.js";
 
+/*
+
+WorkspacePage erhält notes
+↓
+gibt sie an NotesList weiter
+
+App
+↓
+AppRoutes
+↓
+WorkspacePage
+↓
+NotesList
+
+
+1. notes von AppRoutes erhalten
+2. notes an NotesList weitergeben
+3. WorkspacePage verändert den State nicht selbst
+4. Workspace zeigt nur die aktuellen gespeicherten Notes an
+
+*/
+
+
 // WorkspacePage erhält den gemeinsamen Notes-State von der übergeordneten Komponente
 type WorkspacePageProps = Readonly<{
   evidence: readonly Evidence[];
@@ -31,8 +54,12 @@ export function WorkspacePage({
           </div>
         </div>
 
-        {/* Der aktuelle Notes-State wird an NotesList weitergegeben.
-            WorkspacePage verändert die Notes nicht, sondern reicht sie nur zur Anzeige weiter. */}
+        {/*
+
+        Der aktuelle Notes-State wird an NotesList weitergegeben.
+        WorkspacePage verändert die Notes nicht, sondern reicht sie nur zur Anzeige weiter.
+        */}
+
         <div className="workspace-col">
           <h3>Personal Notes</h3>
           <p className="hint-text">

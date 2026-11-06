@@ -12,6 +12,17 @@ import { PeopleSection } from "../features/people-locations/components/PeopleSec
 import { TimelinePage } from "../features/timeline/TimelinePage.js";
 import { WorkspacePage } from "../features/workspace/WorkspacePage.js";
 
+// App
+// ↓
+// AppRoutes
+// ↓
+// EvidencePage
+
+// 1. notes + Callback von App erhalten
+// 2. notes + Callback an EvidencePage weitergeben
+// 3. notes an WorkspacePage weitergeben
+// 4. AppRoutes verändert den State nicht selbst
+
 // Props von App: gemeinsamer State sowie Callbacks für Änderungen
 type AppRoutesProps = Readonly<{
   data: InvestigationData;

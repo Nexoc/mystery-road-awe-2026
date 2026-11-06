@@ -3,6 +3,17 @@ import { useState } from "react";
 import { debugLog } from "../../../../shared/debug.js";
 import type { Evidence } from "../../../../types.js";
 
+{
+  /* EvidencePage gibt savedNote und onSaveNote nur weiter 
+
+  1. savedNote + Callback von EvidencePage erhalten
+  2. draftNote lokal mit useState bearbeiten
+  3. beim Speichern onSaveNote(evidence.id, draftNote) aufrufen
+  4. Parent-State nicht direkt verändern
+  5. gespeicherte Note über savedNote anzeigen
+  */
+}
+
 // EvidenceDetail erhält das ausgewählte Evidence, die gespeicherte Note und den Save-Callback vom Parent
 type EvidenceDetailProps = Readonly<{
   evidence: Evidence;

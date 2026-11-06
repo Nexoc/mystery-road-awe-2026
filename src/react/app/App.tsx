@@ -11,6 +11,24 @@ import type { InvestigationData } from "../../types.js";
 import { normalizeBookmarkIds, toggleBookmarkId } from "../state/bookmarks.js";
 import { AppRoutes } from "./routes.js";
 
+// App besitzt notes
+// ↓
+// Callback geht nach unten
+// ↓
+// Child ruft ihn auf
+// ↓
+// App aktualisiert notes
+
+
+// 1. notes-State speichern
+// 2. handleSaveNote-Callback definieren
+// 3. neues nextNotes-Objekt erzeugen
+// 4. State mit setNotes aktualisieren
+// 5. Notes im localStorage speichern
+// 6. notes + Callback über Props an AppRoutes weitergeben
+
+
+
 type NavigationItem = Readonly<{
   to: string;
   label: string;
@@ -127,17 +145,22 @@ export function App({ data }: AppProps) {
     setBookmarkStorageError(result.ok ? null : result.message);
   };
 
-  // Parent-Callback: Child-Komponenten können damit eine Änderung des gemeinsamen Notes-States anfordern
+  // Parent-Callback:
+  // Child-Komponenten können damit eine Änderung des gemeinsamen Notes-States anfordern
+  // Speichert eine Note:
+    // 1. neues Notes-Objekt ohne Mutation erzeugen
+    // 2. React-State mit setNotes aktualisieren
+    // 3. aktualisierte Notes im localStorage speichern
   const handleSaveNote = (evidenceId: string, text: string) => {
     debugLog("5.6", "App → handleSaveNote received", {
       evidenceId,
       noteLength: text.length,
     });
 
-    // Neues Notes-Objekt erzeugen, ohne den bestehenden State direkt zu verändern
+    // 1. Neues Notes-Objekt erzeugen, ohne den bestehenden State direkt zu verändern
     const nextNotes = { ...notes, [evidenceId]: text };
 
-    // React-State aktualisieren; dadurch wird ein neuer Render mit dem aktualisierten State ausgelöst
+    // 2. React-State aktualisieren;
     setNotes(nextNotes);
 
     debugLog("5.6", "App → notes state update scheduled", {
@@ -145,7 +168,7 @@ export function App({ data }: AppProps) {
       noteCount: Object.values(nextNotes).filter((note) => note.trim()).length,
     });
 
-    // Den aktualisierten Notes-State zusätzlich im localStorage speichern
+    // 3. Aktualisierte Notes zusätzlich im localStorage speichern
     const result = writeNotes(nextNotes);
     setNotesStorageError(result.ok ? null : result.message);
   };
