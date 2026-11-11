@@ -1,4 +1,3 @@
-import { debugLog } from "../../../../shared/debug.js";
 import type { NotesByEvidenceId } from "../../../../shared/persistence.js";
 import type { Evidence } from "../../../../types.js";
 
@@ -28,11 +27,6 @@ export function NotesList({ evidence, notes }: NotesListProps) {
     const text = notes[item.id];
 
     return text?.trim() ? [{ evidence: item, text }] : [];
-  });
-
-  // Im Console-Log sichtbar machen, dass NotesList mit dem aktuellen Notes-State neu gerendert wurde
-  debugLog("5.6", "NotesList → rendered with updated notes", {
-    noteCount: noteEntries.length,
   });
 
   // Hinweis anzeigen, wenn noch keine gespeicherten Notes vorhanden sind

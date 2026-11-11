@@ -1,4 +1,3 @@
-import { debugLog } from "../../../../shared/debug.js";
 import type { Person } from "../../../../types.js";
 import { ContentPanel } from "./ContentPanel.js";
 import { PersonCard } from "./PersonCard.js";
@@ -9,15 +8,6 @@ type PeopleSectionProps = Readonly<{
 
 export function PeopleSection({ people }: PeopleSectionProps) {
   const hasPeople = people.length > 0;
-
-  debugLog(
-    ["4.2", "4.5"],
-    "PEOPLE SECTION → presentational component rendered",
-    {
-      peopleCount: people.length,
-      hasPeople,
-    },
-  );
 
   return (
     <ContentPanel title={`People (${people.length})`}>

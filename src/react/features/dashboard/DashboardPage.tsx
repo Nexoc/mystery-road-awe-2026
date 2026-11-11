@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { debugLog } from "../../../shared/debug.js";
 import type {
   CaseData,
   Evidence,
@@ -211,17 +210,6 @@ export function DashboardPage({ data }: DashboardPageProps) {
       : Math.round((reviewedCount / data.evidence.length) * 100);
   const recentEvidence = data.evidence.slice(-5).reverse();
   const recentTimeline = data.timeline.slice(-5).reverse();
-
-  debugLog("3.10", "DASHBOARD → derived values calculated", {
-    evidenceCount: data.evidence.length,
-    peopleCount: data.people.length,
-    locationCount: data.locations.length,
-    bookmarkCount: bookmarkIds.length,
-    reviewedCount,
-    reviewPercentage,
-    recentEvidenceIds: recentEvidence.map((item) => item.id),
-    recentTimelineIds: recentTimeline.map((event) => event.id),
-  });
 
   return (
     <section>

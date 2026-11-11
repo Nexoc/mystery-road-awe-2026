@@ -43,8 +43,6 @@ const navigationItems: readonly NavigationItem[] = [
 ];
 
 function Navigation() {
-  debugLog("4.8", "NAVIGATION → React Router links rendered");
-
   return (
     <nav className="main-nav" aria-label="Main navigation">
       {navigationItems.map((item) => (
@@ -173,12 +171,6 @@ export function App({ data }: AppProps) {
     const result = writeNotes(nextNotes);
     setNotesStorageError(result.ok ? null : result.message);
   };
-
-  debugLog("4.8", "APP → router-controlled shell rendered", {
-    caseId: data.caseData.caseId,
-    bookmarkCount: bookmarkIds.length,
-    noteCount: Object.values(notes).filter((text) => text.trim()).length,
-  });
 
   return (
     <>

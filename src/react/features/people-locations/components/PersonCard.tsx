@@ -8,18 +8,7 @@ type PersonCardProps = Readonly<{
 
 export function PersonCard({ person }: PersonCardProps) {
   const avatarUrl = `${import.meta.env.BASE_URL}${person.avatar}`;
-
-  debugLog("4.1", "PERSON CARD → component rendered", {
-    personId: person.id,
-    personName: person.name,
-  });
-
   const hasResponsibilities = person.responsibilities.length > 0;
-  debugLog("4.2", "CONDITIONAL → responsibilities evaluated", {
-    personId: person.id,
-    responsibilitiesCount: person.responsibilities.length,
-    hasResponsibilities,
-  });
 
   return (
     <article className="person-card">

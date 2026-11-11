@@ -18,12 +18,6 @@ export function KeyIdentityDemo() {
   const visibleItems = isReversed ? [...keyDemoItems].reverse() : keyDemoItems;
   const nextUrl = isReversed ? "/key-demo" : "/key-demo?order=reverse";
 
-  debugLog("4.4", "KEY DEMO → list rendered with array-index keys", {
-    order: isReversed ? "reverse" : "normal",
-    visibleIds: visibleItems.map((item) => item.id),
-    keyStrategy: "array index (intentionally wrong)",
-  });
-
   return (
     <section>
       <h2>Demo 4.4 — Key Identity</h2>

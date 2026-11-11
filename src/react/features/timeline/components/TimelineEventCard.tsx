@@ -1,4 +1,3 @@
-import { debugLog } from "../../../../shared/debug.js";
 import { formatDate } from "../../../../shared/utils.js";
 import type { TimelineEvent } from "../../../../types.js";
 import { Badge, type BadgeTone } from "../../../shared/components/Badge.js";
@@ -16,18 +15,7 @@ function getCertaintyTone(certainty: string): BadgeTone {
 }
 
 export function TimelineEventCard({ event }: TimelineEventCardProps) {
-  debugLog("4.3", "TIMELINE ITEM → component rendered", {
-    eventId: event.id,
-    title: event.title,
-  });
-
   const certaintyTone = getCertaintyTone(event.certainty);
-
-  debugLog("4.7", "TIMELINE → certainty mapped to badge tone", {
-    eventId: event.id,
-    certainty: event.certainty,
-    certaintyTone,
-  });
 
   return (
     <article className={`timeline-event certainty-${event.certainty}`}>

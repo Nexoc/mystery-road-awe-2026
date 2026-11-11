@@ -1,9 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { debugLog } from "../../../shared/debug.js";
 
 export function PeopleLocationsLayout() {
-  debugLog("4.8", "TEAM LAYOUT → route layout rendered");
-
   return (
     <section>
       <h2>People &amp; Locations</h2>

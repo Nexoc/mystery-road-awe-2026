@@ -1,5 +1,4 @@
 import { Link, useSearchParams } from "react-router-dom";
-import { debugLog } from "../../../shared/debug.js";
 import type { Location, Person, TimelineEvent } from "../../../types.js";
 import { TimelineEventCard } from "./components/TimelineEventCard.js";
 import { TimelineFilters } from "./components/TimelineFilters.js";
@@ -27,20 +26,6 @@ export function TimelinePage({ events, people, locations }: TimelinePageProps) {
     new Set(events.map((event) => event.type)),
   ).sort((first, second) => first.localeCompare(second));
   const hasEvents = visibleEvents.length > 0;
-
-  debugLog("4.3", "TIMELINE LIST → collection received", {
-    eventCount: events.length,
-    eventIds: events.map((event) => event.id),
-  });
-
-  debugLog("4.10", "QUERY PARAM → Timeline person filter resolved", {
-    rawPersonId,
-    requestedPersonId,
-    selectedPersonId: selectedPerson?.id,
-    hasInvalidPersonFilter,
-    totalEventCount: events.length,
-    visibleEventIds: visibleEvents.map((event) => event.id),
-  });
 
   return (
     <section>

@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { debugLog } from "../../../shared/debug.js";
 
 export type BadgeTone = "neutral" | "success" | "warning" | "critical";
 
@@ -17,11 +16,6 @@ const badgeClassByTone: Readonly<Record<BadgeTone, string>> = {
 
 export function Badge({ tone, children }: BadgeProps) {
   const toneClass = badgeClassByTone[tone];
-
-  debugLog("4.7", "BADGE → shared component rendered", {
-    tone,
-    toneClass,
-  });
 
   return <span className={`badge ${toneClass}`}>{children}</span>;
 }

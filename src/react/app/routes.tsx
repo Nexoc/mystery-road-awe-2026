@@ -1,5 +1,4 @@
 import { Link, Navigate, Route, Routes } from "react-router-dom";
-import { debugLog } from "../../shared/debug.js";
 import type { NotesByEvidenceId } from "../../shared/persistence.js";
 import type { InvestigationData } from "../../types.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
@@ -42,8 +41,6 @@ function NotFoundPage() {
 
 // AppRoutes erhält den gemeinsamen Notes-State und die Callbacks von App
 export function AppRoutes({ data, notes, onSaveNote }: AppRoutesProps) {
-  debugLog("4.8", "ROUTES → route table rendered");
-
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/dashboard" replace />} />

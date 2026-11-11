@@ -10,13 +10,7 @@ type PersonDetailsPageProps = Readonly<{
 export function PersonDetailsPage({ people }: PersonDetailsPageProps) {
   const { personId } = useParams<"personId">();
 
-  debugLog("4.9", "ROUTE PARAM → personId read from URL", {
-    personId,
-  });
-
   if (personId === undefined) {
-    debugLog("4.9", "PERSON DETAILS → route parameter is missing");
-
     return (
       <ContentPanel title="Person not found">
         <p>The URL does not contain a person ID.</p>
@@ -26,11 +20,6 @@ export function PersonDetailsPage({ people }: PersonDetailsPageProps) {
   }
 
   const person = people.find((candidate) => candidate.id === personId);
-
-  debugLog("4.9", "PERSON DETAILS → person lookup completed", {
-    personId,
-    personFound: person !== undefined,
-  });
 
   if (person === undefined) {
     return (

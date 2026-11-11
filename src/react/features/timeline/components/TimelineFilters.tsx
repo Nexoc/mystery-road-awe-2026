@@ -1,4 +1,3 @@
-import { debugLog } from "../../../../shared/debug.js";
 import type { Location, Person } from "../../../../types.js";
 
 type TimelineFiltersProps = Readonly<{
@@ -14,13 +13,6 @@ export function TimelineFilters({
   eventTypes,
   selectedPersonId,
 }: TimelineFiltersProps) {
-  debugLog("4.10", "TIMELINE FILTERS → visual controls rendered", {
-    selectedPersonId,
-    peopleCount: people.length,
-    locationCount: locations.length,
-    eventTypeCount: eventTypes.length,
-  });
-
   return (
     <div className="toolbar">
       <div className="toolbar-row">
