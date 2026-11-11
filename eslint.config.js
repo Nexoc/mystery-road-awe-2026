@@ -31,6 +31,20 @@ export default [
       "no-undef": "error",
     },
   },
+  {
+    files: ["server/**/*.js"],
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        process: "readonly",
+        setTimeout: "readonly",
+        URL: "readonly",
+      },
+    },
+    rules: {
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    },
+  },
   ...typescriptRecommended,
   {
     files: ["**/*.ts"],

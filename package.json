@@ -34,15 +34,18 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:server": "node --watch server/index.js",
+    "start:server": "node server/index.js",
     "typecheck": "tsc --noEmit",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write \"src/**/*.{js,ts,tsx}\" \"*.{js,ts,tsx,json,html,css}\"",
-    "format:check": "prettier --check \"src/**/*.{js,ts,tsx}\" \"*.{js,ts,tsx,json,html,css}\""
+    "format": "prettier --write \"src/**/*.{js,ts,tsx}\" \"server/**/*.js\" \"*.{js,ts,tsx,json,html,css}\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts,tsx}\" \"server/**/*.js\" \"*.{js,ts,tsx,json,html,css}\""
   },
   "dependencies": {
+    "express": "^5.3.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "react-router-dom": "^7.18.4"

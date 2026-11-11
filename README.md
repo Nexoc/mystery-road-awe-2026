@@ -35,6 +35,47 @@ npx serve .
 
 Then open `http://localhost:8080` (or whatever port your server prints) in your browser.
 
+## Exercise 6 local backend
+
+The Exercise 6 backend is read-only and runs during local development only. It is not deployed to
+GitHub Pages. Install dependencies once:
+
+```bash
+npm install
+```
+
+Then use two terminals:
+
+```bash
+# Terminal 1: Node API on http://127.0.0.1:3001
+npm run dev:server
+
+# Terminal 2: Vite frontend
+npm run dev
+```
+
+The frontend uses Vite's `/api` proxy, so no browser CORS configuration is needed. Available API
+endpoints:
+
+```text
+GET /api/case
+GET /api/evidence
+GET /api/people
+GET /api/locations
+GET /api/timeline
+GET /api/health
+```
+
+Data endpoints support repeatable development simulations:
+
+```text
+?delay=2000  delay the response by 2000 ms
+?fail=1      return a simulated HTTP 500 response
+```
+
+The server reads `public/data/*.json` and never writes case data. Bookmarks, notes, and the
+hypothesis draft remain in browser `localStorage`.
+
 ## Features
 
 - **Dashboard** — case summary and key statistics calculated from the loaded case data.

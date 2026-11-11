@@ -6,4 +6,12 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base: "/mystery-road-awe-2026/",
   plugins: [react()],
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:3001",
+        changeOrigin: true,
+      },
+    },
+  },
 });
