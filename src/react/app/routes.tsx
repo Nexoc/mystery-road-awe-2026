@@ -26,8 +26,6 @@ import { WorkspacePage } from "../features/workspace/WorkspacePage.js";
 // Props von App: gemeinsamer State sowie Callbacks für Änderungen
 type AppRoutesProps = Readonly<{
   data: InvestigationData;
-  bookmarkIds: readonly string[];
-  onToggleBookmark: (evidenceId: string) => void;
   notes: Readonly<NotesByEvidenceId>;
   onSaveNote: (evidenceId: string, text: string) => void;
 }>;
@@ -43,23 +41,14 @@ function NotFoundPage() {
 }
 
 // AppRoutes erhält den gemeinsamen Notes-State und die Callbacks von App
-export function AppRoutes({
-  data,
-  bookmarkIds,
-  onToggleBookmark,
-  notes,
-  onSaveNote,
-}: AppRoutesProps) {
+export function AppRoutes({ data, notes, onSaveNote }: AppRoutesProps) {
   debugLog("4.8", "ROUTES → route table rendered");
 
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-      <Route
-        path="/dashboard"
-        element={<DashboardPage data={data} bookmarkIds={bookmarkIds} />}
-      />
+      <Route path="/dashboard" element={<DashboardPage data={data} />} />
 
       {/* Notes-State und Save-Callback werden unverändert an EvidencePage weitergegeben */}
       <Route
@@ -69,8 +58,6 @@ export function AppRoutes({
             evidence={data.evidence}
             people={data.people}
             locations={data.locations}
-            bookmarkIds={bookmarkIds}
-            onToggleBookmark={onToggleBookmark}
             notes={notes}
             onSaveNote={onSaveNote}
           />
@@ -112,7 +99,6 @@ export function AppRoutes({
           <WorkspacePage
             evidence={data.evidence}
             people={data.people}
-            bookmarkIds={bookmarkIds}
             notes={notes}
           />
         }

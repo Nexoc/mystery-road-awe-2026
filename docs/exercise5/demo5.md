@@ -1,12 +1,15 @@
 # Demo 5 — lifting state к общему владельцу
 
+> Здесь описана prop-версия этапа Demo 5. В Demo 8 доставка bookmarks переводится на Context, а
+> владельцем state остаётся `App`.
+
 ## Что изменено
 
 Раньше bookmark state находился только в `EvidencePage`. Dashboard и Workspace продолжали читать
 первоначальный `data.bookmarkIds`, поэтому после toggle показывали устаревшие данные.
 
-Теперь единственный `useState` для bookmark IDs находится в `App` — ближайшем общем предке sibling
-routes Dashboard, Evidence и Workspace.
+Теперь единственный `useState` для bookmark IDs находится в `App` — практическом общем владельце
+sibling routes Dashboard, Evidence и Workspace, persistence и storage-error UI.
 
 ```text
 App — владеет bookmarkIds

@@ -1,20 +1,17 @@
 import type { KeyboardEvent, MouseEvent } from "react";
 import { debugLog } from "../../../../shared/debug.js";
 import type { Evidence } from "../../../../types.js";
+import { useBookmarks } from "../../../state/BookmarkContext.js";
 
 type EvidenceCardProps = Readonly<{
   evidence: Evidence;
-  isBookmarked: boolean;
   onOpen: (evidenceId: string) => void;
-  onToggleBookmark: (evidenceId: string) => void;
 }>;
 
-export function EvidenceCard({
-  evidence,
-  isBookmarked,
-  onToggleBookmark,
-  onOpen,
-}: EvidenceCardProps) {
+export function EvidenceCard({ evidence, onOpen }: EvidenceCardProps) {
+  const { isBookmarked, toggleBookmark } = useBookmarks();
+  const bookmarked = isBookmarked(evidence.id);
+
   const handleCardKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.target !== event.currentTarget) return;
 
@@ -31,7 +28,7 @@ export function EvidenceCard({
       evidenceId: evidence.id,
     });
 
-    onToggleBookmark(evidence.id);
+    toggleBookmark(evidence.id);
   };
 
   return (
@@ -45,13 +42,13 @@ export function EvidenceCard({
     >
       <button
         type="button"
-        className={isBookmarked ? "bookmark-btn active" : "bookmark-btn"}
+        className={bookmarked ? "bookmark-btn active" : "bookmark-btn"}
         aria-label={`Toggle bookmark for ${evidence.title}`}
-        aria-pressed={isBookmarked}
+        aria-pressed={bookmarked}
         onClick={handleBookmarkClick}
       >
         <span className="bookmark-icon" aria-hidden="true">
-          {isBookmarked ? "★" : "☆"}
+          {bookmarked ? "★" : "☆"}
         </span>
       </button>
 

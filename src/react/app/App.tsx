@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { debugLog } from "../../shared/debug.js";
 import {
@@ -8,6 +8,7 @@ import {
   type NotesByEvidenceId,
 } from "../../shared/persistence.js";
 import type { InvestigationData } from "../../types.js";
+import { BookmarkProvider } from "../state/BookmarkContext.js";
 import { normalizeBookmarkIds, toggleBookmarkId } from "../state/bookmarks.js";
 import { AppRoutes } from "./routes.js";
 
@@ -18,7 +19,6 @@ import { AppRoutes } from "./routes.js";
 // Child ruft ihn auf
 // ↓
 // App aktualisiert notes
-
 
 // 1. notes-State speichern
 // 2. handleSaveNote-Callback definieren
@@ -125,30 +125,33 @@ export function App({ data }: AppProps) {
     null,
   );
 
-  const handleToggleBookmark = (evidenceId: string) => {
-    debugLog("5.6", "App → handleToggleBookmark received", {
-      evidenceId,
-    });
+  const handleToggleBookmark = useCallback(
+    (evidenceId: string) => {
+      debugLog("5.6", "App → handleToggleBookmark received", {
+        evidenceId,
+      });
 
-    const nextBookmarkIds = toggleBookmarkId(bookmarkIds, evidenceId);
+      const nextBookmarkIds = toggleBookmarkId(bookmarkIds, evidenceId);
 
-    setBookmarkIds(nextBookmarkIds);
+      setBookmarkIds(nextBookmarkIds);
 
-    debugLog("5.6", "App → bookmark state update scheduled", {
-      evidenceId,
-      bookmarkCount: nextBookmarkIds.length,
-    });
+      debugLog("5.6", "App → bookmark state update scheduled", {
+        evidenceId,
+        bookmarkCount: nextBookmarkIds.length,
+      });
 
-    const result = writeBookmarkIds(nextBookmarkIds);
-    setBookmarkStorageError(result.ok ? null : result.message);
-  };
+      const result = writeBookmarkIds(nextBookmarkIds);
+      setBookmarkStorageError(result.ok ? null : result.message);
+    },
+    [bookmarkIds],
+  );
 
   // Parent-Callback:
   // Child-Komponenten können damit eine Änderung des gemeinsamen Notes-States anfordern
   // Speichert eine Note:
-    // 1. neues Notes-Objekt ohne Mutation erzeugen
-    // 2. React-State mit setNotes aktualisieren
-    // 3. aktualisierte Notes im localStorage speichern
+  // 1. neues Notes-Objekt ohne Mutation erzeugen
+  // 2. React-State mit setNotes aktualisieren
+  // 3. aktualisierte Notes im localStorage speichern
   const handleSaveNote = (evidenceId: string, text: string) => {
     debugLog("5.6", "App → handleSaveNote received", {
       evidenceId,
@@ -196,13 +199,12 @@ export function App({ data }: AppProps) {
 
         {/* Der gemeinsame Notes-State und der Save-Callback werden über Props
             an AppRoutes weitergegeben. App bleibt Besitzer des States. */}
-        <AppRoutes
-          data={data}
+        <BookmarkProvider
           bookmarkIds={bookmarkIds}
           onToggleBookmark={handleToggleBookmark}
-          notes={notes}
-          onSaveNote={handleSaveNote}
-        />
+        >
+          <AppRoutes data={data} notes={notes} onSaveNote={handleSaveNote} />
+        </BookmarkProvider>
       </main>
 
       <Footer />

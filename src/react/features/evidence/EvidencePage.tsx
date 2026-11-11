@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { NotesByEvidenceId } from "../../../shared/persistence.js";
 import type { Evidence, Location, Person } from "../../../types.js";
@@ -6,30 +6,28 @@ import { EvidenceCard } from "./components/EvidenceCard.js";
 import { EvidenceDetail } from "./components/EvidenceDetail.js";
 import { EvidenceToolbar } from "./components/EvidenceToolbar.js";
 import {
+  evidenceFiltersReducer,
   getVisibleEvidence,
   initialEvidenceFilters,
   type EvidenceFilterName,
   type EvidenceFilters,
+  type EvidenceSortOrder,
 } from "./evidenceFilters.js";
 
 // EvidencePage erhält notes + Callback
 // ↓
 // gibt beides an EvidenceDetail weiter
 
-
 // 1. notes + Callback von AppRoutes erhalten
 // 2. gespeicherte Note für das ausgewählte Evidence lesen
 // 3. savedNote + Callback an EvidenceDetail weitergeben
 // 4. EvidencePage verändert den State nicht selbst
-
 
 // Props enthalten den gemeinsamen Notes-State und die Callbacks der übergeordneten Komponenten
 type EvidencePageProps = Readonly<{
   evidence: readonly Evidence[];
   people: readonly Person[];
   locations: readonly Location[];
-  bookmarkIds: readonly string[];
-  onToggleBookmark: (evidenceId: string) => void;
   notes: Readonly<NotesByEvidenceId>;
   onSaveNote: (evidenceId: string, text: string) => void;
 }>;
@@ -39,13 +37,12 @@ export function EvidencePage({
   evidence,
   people,
   locations,
-  bookmarkIds,
-  onToggleBookmark,
   notes,
   onSaveNote,
 }: EvidencePageProps) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [filters, setFilters] = useState<EvidenceFilters>(
+  const [filters, dispatchFilters] = useReducer(
+    evidenceFiltersReducer,
     initialEvidenceFilters,
   );
 
@@ -59,10 +56,11 @@ export function EvidencePage({
     name: Name,
     value: EvidenceFilters[Name],
   ) => {
-    setFilters((currentFilters) => ({
-      ...currentFilters,
-      [name]: value,
-    }));
+    dispatchFilters({ type: "SET_FILTER", name, value });
+  };
+
+  const handleSortChange = (sortOrder: EvidenceSortOrder) => {
+    dispatchFilters({ type: "SET_SORT", sortOrder });
   };
 
   const handleOpenEvidence = (evidenceId: string) => {
@@ -94,7 +92,8 @@ export function EvidencePage({
         locations={locations}
         filters={filters}
         onFilterChange={handleFilterChange}
-        onClearFilters={() => setFilters(initialEvidenceFilters)}
+        onSortChange={handleSortChange}
+        onClearFilters={() => dispatchFilters({ type: "CLEAR_FILTERS" })}
       />
 
       <p className="hint-text">
@@ -106,9 +105,7 @@ export function EvidencePage({
           <EvidenceCard
             key={item.id}
             evidence={item}
-            isBookmarked={bookmarkIds.includes(item.id)}
             onOpen={handleOpenEvidence}
-            onToggleBookmark={onToggleBookmark}
           />
         ))}
 

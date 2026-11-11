@@ -23,25 +23,17 @@ NotesList
 2. notes an NotesList weitergeben
 3. WorkspacePage verändert den State nicht selbst
 4. Workspace zeigt nur die aktuellen gespeicherten Notes an
-
 */
-
 
 // WorkspacePage erhält den gemeinsamen Notes-State von der übergeordneten Komponente
 type WorkspacePageProps = Readonly<{
   evidence: readonly Evidence[];
   people: readonly Person[];
-  bookmarkIds: readonly string[];
   notes: Readonly<NotesByEvidenceId>;
 }>;
 
 // Der aktuelle Notes-State wird über Props bis zu WorkspacePage weitergegeben
-export function WorkspacePage({
-  evidence,
-  people,
-  bookmarkIds,
-  notes,
-}: WorkspacePageProps) {
+export function WorkspacePage({ evidence, people, notes }: WorkspacePageProps) {
   return (
     <section>
       <h2>Investigator Workspace</h2>
@@ -50,7 +42,7 @@ export function WorkspacePage({
         <div className="workspace-col">
           <h3>Bookmarked Evidence</h3>
           <div className="bookmarks-list">
-            <BookmarksList evidence={evidence} bookmarkIds={bookmarkIds} />
+            <BookmarksList evidence={evidence} />
           </div>
         </div>
 

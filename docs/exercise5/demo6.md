@@ -1,5 +1,8 @@
 # Demo 6 — callbacks вниз по дереву
 
+> Здесь описана prop-chain на этапе Demo 6. Она сохранена в commit `e424934`; в Demo 8 bookmark
+> chain заменяется Context, а note callback остаётся явным.
+
 ## Владельцы состояния
 
 Bookmark state и Notes state находятся в `App`.

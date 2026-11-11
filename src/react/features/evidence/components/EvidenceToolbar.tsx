@@ -14,6 +14,7 @@ type EvidenceToolbarProps = Readonly<{
     name: Name,
     value: EvidenceFilters[Name],
   ) => void;
+  onSortChange: (sortOrder: EvidenceSortOrder) => void;
   onClearFilters: () => void;
 }>;
 
@@ -23,6 +24,7 @@ export function EvidenceToolbar({
   locations,
   filters,
   onFilterChange,
+  onSortChange,
   onClearFilters,
 }: EvidenceToolbarProps) {
   const evidenceTypes = [
@@ -141,10 +143,7 @@ export function EvidenceToolbar({
           id="sortEvidence"
           value={filters.sortOrder}
           onChange={(event) =>
-            onFilterChange(
-              "sortOrder",
-              event.currentTarget.value as EvidenceSortOrder,
-            )
+            onSortChange(event.currentTarget.value as EvidenceSortOrder)
           }
         >
           <option value="date-desc">Newest first</option>

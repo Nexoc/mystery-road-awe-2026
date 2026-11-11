@@ -1,15 +1,14 @@
 import { Link } from "react-router-dom";
 import type { Evidence } from "../../../../types.js";
+import { useBookmarks } from "../../../state/BookmarkContext.js";
 
 type BookmarksListProps = Readonly<{
   evidence: readonly Evidence[];
-  bookmarkIds: readonly string[];
 }>;
 
-export function BookmarksList({ evidence, bookmarkIds }: BookmarksListProps) {
-  const bookmarkedEvidence = evidence.filter((item) =>
-    bookmarkIds.includes(item.id),
-  );
+export function BookmarksList({ evidence }: BookmarksListProps) {
+  const { isBookmarked } = useBookmarks();
+  const bookmarkedEvidence = evidence.filter((item) => isBookmarked(item.id));
 
   if (bookmarkedEvidence.length === 0) {
     return (

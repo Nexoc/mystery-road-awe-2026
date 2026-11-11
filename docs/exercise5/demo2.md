@@ -1,5 +1,8 @@
 # Demo 2 — `useState` и controlled forms
 
+> Здесь описано состояние проекта на этапе Demo 2. В Demo 7 Evidence filters переводятся с
+> `useState` на `useReducer`, оставаясь controlled.
+
 ## Что изменено
 
 - Search в Evidence стал controlled input: значение хранится в `searchTerm`, передаётся через

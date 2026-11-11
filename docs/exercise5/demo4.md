@@ -1,5 +1,8 @@
 # Demo 4 — derived values вместо лишнего state
 
+> Здесь описано состояние проекта на этапе Demo 4. Поздние Demo меняют доставку bookmark state, но
+> derived count и lists сохраняются.
+
 ## Что изменено
 
 - Search, type, person, location, status, relevance и sort хранятся как исходные параметры

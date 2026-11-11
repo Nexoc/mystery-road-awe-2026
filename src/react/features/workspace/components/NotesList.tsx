@@ -2,7 +2,6 @@ import { debugLog } from "../../../../shared/debug.js";
 import type { NotesByEvidenceId } from "../../../../shared/persistence.js";
 import type { Evidence } from "../../../../types.js";
 
-
 /*
 NotesList erhält die aktuellen notes
 ↓
@@ -10,14 +9,12 @@ filtert vorhandene Notes
 ↓
 rendert sie im Workspace
 
-
 1. notes + Evidence-Daten von WorkspacePage erhalten
 2. nur Evidence mit gespeicherten Notes auswählen
 3. gespeicherte Notes im Workspace anzeigen
 4. NotesList verändert den State nicht selbst
 
 */
-
 
 // NotesList erhält die Evidence-Daten und den aktuellen gemeinsamen Notes-State
 type NotesListProps = Readonly<{

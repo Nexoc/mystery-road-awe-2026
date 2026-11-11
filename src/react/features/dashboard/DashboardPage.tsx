@@ -8,10 +8,10 @@ import type {
 } from "../../../types.js";
 
 import { Badge, type BadgeTone } from "../../shared/components/Badge.js";
+import { useBookmarks } from "../../state/BookmarkContext.js";
 
 type DashboardPageProps = Readonly<{
   data: InvestigationData;
-  bookmarkIds: readonly string[];
 }>;
 
 type CaseSummaryProps = Readonly<{
@@ -200,7 +200,8 @@ function RecentTimeline({ timeline }: RecentTimelineProps) {
   );
 }
 
-export function DashboardPage({ data, bookmarkIds }: DashboardPageProps) {
+export function DashboardPage({ data }: DashboardPageProps) {
+  const { bookmarkIds } = useBookmarks();
   const reviewedCount = data.evidence.filter(
     (item) => item.status.toLowerCase() === "reviewed",
   ).length;

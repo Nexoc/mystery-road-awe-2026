@@ -13,7 +13,21 @@ export type EvidenceFilters = Readonly<{
   sortOrder: EvidenceSortOrder;
 }>;
 
-export type EvidenceFilterName = keyof EvidenceFilters;
+export type EvidenceFilterName = Exclude<keyof EvidenceFilters, "sortOrder">;
+
+export type EvidenceFiltersAction =
+  | Readonly<{
+      type: "SET_FILTER";
+      name: EvidenceFilterName;
+      value: EvidenceFilters[EvidenceFilterName];
+    }>
+  | Readonly<{
+      type: "SET_SORT";
+      sortOrder: EvidenceSortOrder;
+    }>
+  | Readonly<{
+      type: "CLEAR_FILTERS";
+    }>;
 
 export const initialEvidenceFilters: EvidenceFilters = {
   searchTerm: "",
@@ -24,6 +38,32 @@ export const initialEvidenceFilters: EvidenceFilters = {
   relevance: "",
   sortOrder: "date-desc",
 };
+
+function assertNever(value: never): never {
+  throw new Error(
+    `Unhandled evidence filters action: ${JSON.stringify(value)}`,
+  );
+}
+
+export function evidenceFiltersReducer(
+  state: EvidenceFilters,
+  action: EvidenceFiltersAction,
+): EvidenceFilters {
+  switch (action.type) {
+    case "SET_FILTER":
+      return state[action.name] === action.value
+        ? state
+        : { ...state, [action.name]: action.value };
+    case "SET_SORT":
+      return state.sortOrder === action.sortOrder
+        ? state
+        : { ...state, sortOrder: action.sortOrder };
+    case "CLEAR_FILTERS":
+      return initialEvidenceFilters;
+    default:
+      return assertNever(action);
+  }
+}
 
 function matchesPerson(
   evidence: Evidence,
