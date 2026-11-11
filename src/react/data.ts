@@ -11,6 +11,8 @@ import type {
 
 type Validator<T> = (value: unknown) => value is T;
 
+const API_BASE_PATH = "/api";
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
@@ -115,36 +117,36 @@ function isTimelineEventArray(value: unknown): value is TimelineEvent[] {
 }
 
 async function loadJson<T>(
-  fileName: string,
+  resourceName: string,
   validator: Validator<T>,
 ): Promise<T> {
-  const url = `${import.meta.env.BASE_URL}data/${fileName}`;
+  const url = `${API_BASE_PATH}/${resourceName}`;
 
-  debugLog("3.10", "DATA → request started", {
-    fileName,
+  debugLog(["3.10", "6.5"], "DATA → request started", {
+    resourceName,
     url,
   });
 
   const response = await fetch(url);
 
-  debugLog("3.10", "DATA → response received", {
-    fileName,
+  debugLog(["3.10", "6.5"], "DATA → response received", {
+    resourceName,
     status: response.status,
     ok: response.ok,
   });
 
   if (!response.ok) {
-    throw new Error(`Could not load ${fileName}: ${response.status}`);
+    throw new Error(`Could not load ${resourceName}: ${response.status}`);
   }
 
   const value: unknown = await response.json();
 
   if (!validator(value)) {
-    throw new TypeError(`Invalid data/${fileName}`);
+    throw new TypeError(`Invalid API response for ${resourceName}`);
   }
 
-  debugLog("3.10", "DATA → JSON validated", {
-    fileName,
+  debugLog(["3.10", "6.5"], "DATA → JSON validated", {
+    resourceName,
     itemCount: Array.isArray(value) ? value.length : 1,
   });
 
@@ -152,14 +154,14 @@ async function loadJson<T>(
 }
 
 export async function loadInvestigationData(): Promise<InvestigationData> {
-  debugLog("3.10", "DATA → dashboard data loading started");
+  debugLog(["3.10", "6.5"], "DATA → investigation loading started");
 
   const [caseData, evidence, people, locations, timeline] = await Promise.all([
-    loadJson("case.json", isCaseData),
-    loadJson("evidence.json", isEvidenceArray),
-    loadJson("people.json", isPersonArray),
-    loadJson("locations.json", isLocationArray),
-    loadJson("timeline.json", isTimelineEventArray),
+    loadJson("case", isCaseData),
+    loadJson("evidence", isEvidenceArray),
+    loadJson("people", isPersonArray),
+    loadJson("locations", isLocationArray),
+    loadJson("timeline", isTimelineEventArray),
   ]);
 
   const evidenceIds = new Set(evidence.map((item) => item.id));
@@ -173,7 +175,7 @@ export async function loadInvestigationData(): Promise<InvestigationData> {
     bookmarkIds,
   };
 
-  debugLog("3.10", "DATA → all dashboard data ready", {
+  debugLog(["3.10", "6.5"], "DATA → all investigation data ready", {
     caseId: caseData.caseId,
     evidenceCount: evidence.length,
     peopleCount: people.length,
