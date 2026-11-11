@@ -3,6 +3,7 @@ import type { NotesByEvidenceId } from "../../shared/persistence.js";
 import type { InvestigationData } from "../../types.js";
 import { DashboardPage } from "../features/dashboard/DashboardPage.js";
 import { EvidencePage } from "../features/evidence/EvidencePage.js";
+import { EffectLifecycleDemo } from "../features/effects/EffectLifecycleDemo.js";
 import { KeyIdentityDemo } from "../features/key-identity/KeyIdentityDemo.js";
 import { PeopleLocationsLayout } from "../features/people-locations/PeopleLocationsLayout.js";
 import { PersonDetailsPage } from "../features/people-locations/PersonDetailsPage.js";
@@ -102,6 +103,7 @@ export function AppRoutes({ data, notes, onSaveNote }: AppRoutesProps) {
       />
 
       <Route path="/key-demo" element={<KeyIdentityDemo />} />
+      <Route path="/effects-demo" element={<EffectLifecycleDemo />} />
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

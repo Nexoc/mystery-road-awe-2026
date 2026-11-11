@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { debugLog } from "../../shared/debug.js";
 import {
   readNotes,
@@ -41,6 +41,29 @@ const navigationItems: readonly NavigationItem[] = [
   { to: "/workspace", label: "Workspace", end: true },
   { to: "/key-demo", label: "Key Demo 4.4", end: true },
 ];
+
+function getPageTitle(pathname: string): string {
+  if (pathname === "/dashboard" || pathname === "/") return "Dashboard";
+  if (pathname === "/evidence") return "Evidence";
+  if (pathname.startsWith("/team")) return "People & Locations";
+  if (pathname === "/timeline") return "Timeline";
+  if (pathname === "/workspace") return "Workspace";
+  if (pathname === "/effects-demo") return "Effects Demo";
+  if (pathname === "/key-demo") return "Key Demo";
+
+  return "Page not found";
+}
+
+function DocumentTitleSync() {
+  const { pathname } = useLocation();
+  const pageTitle = getPageTitle(pathname);
+
+  useEffect(() => {
+    document.title = `${pageTitle} | Project ReMotion`;
+  }, [pageTitle]);
+
+  return null;
+}
 
 function Navigation() {
   return (
@@ -174,6 +197,7 @@ export function App({ data }: AppProps) {
 
   return (
     <>
+      <DocumentTitleSync />
       <Header />
 
       <main className="app-main">
