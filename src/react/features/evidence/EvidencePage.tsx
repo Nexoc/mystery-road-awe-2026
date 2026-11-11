@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { NotesByEvidenceId } from "../../../shared/persistence.js";
 import type { Evidence, Location, Person } from "../../../types.js";
@@ -70,12 +70,12 @@ export function EvidencePage({
     setSearchParams(nextSearchParams);
   };
 
-  const handleCloseEvidence = () => {
+  const handleCloseEvidence = useCallback(() => {
     const nextSearchParams = new URLSearchParams(searchParams);
 
     nextSearchParams.delete("item");
     setSearchParams(nextSearchParams, { replace: true });
-  };
+  }, [searchParams, setSearchParams]);
 
   return (
     <section>

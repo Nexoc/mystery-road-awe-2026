@@ -1,5 +1,5 @@
 import type { SubmitEventHandler } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { debugLog } from "../../../../shared/debug.js";
 import type { Evidence } from "../../../../types.js";
 
@@ -30,6 +30,29 @@ export function EvidenceDetail({
 }: EvidenceDetailProps) {
   // Lokaler Draft-State: Änderungen beim Tippen werden zunächst nur hier gespeichert
   const [draftNote, setDraftNote] = useState(savedNote);
+
+  useEffect(() => {
+    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+
+      debugLog("6.3", "EvidenceDetail → Escape requested close", {
+        evidenceId: evidence.id,
+      });
+      onClose();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    debugLog("6.3", "EvidenceDetail → keydown subscription added", {
+      evidenceId: evidence.id,
+    });
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      debugLog("6.3", "EvidenceDetail → keydown subscription removed", {
+        evidenceId: evidence.id,
+      });
+    };
+  }, [evidence.id, onClose]);
 
   // Beim Absenden wird der Parent über den Callback aufgefordert, den aktuellen Draft zu speichern
   const handleNoteSubmit: SubmitEventHandler<HTMLFormElement> = (event) => {
